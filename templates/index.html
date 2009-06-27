@@ -1,0 +1,18 @@
+{% extends "alsuper.html" %}
+{% block content%}
+<p>
+{% for course in courses %}
+	<p>
+	<table class="hr">
+		<tr>
+			<td><a href="/course/show/{{course.short_name}}/">{{course.short_name}}</a> {{course.name}}</td>
+		</tr>
+		<tr>
+			<td>{{course.description}}</td>
+		</tr>
+	</table>
+	</p>
+{%endfor%}
+</p>
+{% endblock %}
+

@@ -1,0 +1,45 @@
+<html>
+<head>
+{% block title %}{% endblock %}
+<link rel="stylesheet" type="text/css" href="/site-media/al/style.css" />
+</head>
+
+<body>
+<div id="canvasWrapper">
+<div id="canvas">
+<div id="pageHeaderWrapper">
+<div id="pageHeader">
+<h1 id="siteTitle"><a href="http://www.adaptivelearningonline.net/">Adaptive Learning Solutions</a></h1>
+<div id="siteSubtitle" class="h1subtitle">{% include "mainmenu.html" %}</div> 
+</div>
+</div>
+{% block header %}{% endblock %}
+<p>
+	{% if errors %}
+		<ul>
+		{% for error in errors %}
+			<li>{{error}}</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+</p>
+<p>
+	{% if messages %}
+		<ul>
+		{% for message in messages %}
+			<li>{{message}}</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+</p>
+
+<p>
+{% block content %}{% endblock %}
+</p>
+
+{% block footer %}{% endblock %}
+</div>
+</div>
+</body>
+</html>
+

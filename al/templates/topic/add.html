@@ -1,0 +1,13 @@
+{% extends "alsuper.html" %}
+{% block header %}
+Add a course
+{% endblock %}
+{% block content %}
+<p>
+<form action="/manage/course/topic/add/" method="POST">
+	Course: <input type="text" name="course_short_name" value="{{course_short_name}}" /><br><br>
+	Title: <input type="text" name="title"><br><br>
+	Content: <textarea name="content"></textarea><br><br>
+	<input type="submit" value="Submit">
+</form>
+{% endblock %}
