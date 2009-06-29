@@ -1,8 +1,5 @@
-<html>
-<head></head>
-
-<body>
-{% include "mainmenu.html" %}
+{% extends "alsuper.html" %}
+{% block content%}
 <a href="/manage/course/add/">Add Course</a>
 <p>
 <form action="/manage/course/deletes/" method="POST">
@@ -20,6 +17,4 @@
 	</p>
 </form>
 </p>
-</body>
-</html>
-
+{% endblock %}
