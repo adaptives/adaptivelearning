@@ -1,11 +1,13 @@
 from django.http import HttpResponse
+from django.template import RequestContext
 from django.shortcuts import render_to_response
 from al.models import Course
 from al.models import Topic
 
 def course_list(request):
+	print "user: ", request.user.username
 	courses = Course.objects.all()
-	return render_to_response('index.html', {'courses':courses})
+	return render_to_response('index.html', {'courses':courses}, context_instance=RequestContext(request))
 
 
 def course_show(request, course_short_name):
@@ -13,10 +15,10 @@ def course_show(request, course_short_name):
 	if(course_short_name):
 		course = Course.objects.get(short_name=course_short_name)
 		topics = course.topic_set.all()
-		return render_to_response('course/show.html', {'course':course, 'topics':topics})
+		return render_to_response('course/show.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
 	else:
 		errors.append("could not find any course to display")
-		return render_to_response('/', {'errors':errors})
+		return render_to_response('/', {'errors':errors}, context_instance=RequestContext(request))
 
 
 def course_add(request):
@@ -32,11 +34,11 @@ def course_add(request):
 			print "Thanks for creating a course %s - %s - %s" % (short_name, name, description)
 			c = Course(short_name=short_name, name=name, description=description)
 			c.save()
-		return render_to_response('course/add.html', {'errors': errors})
+		return render_to_response('course/add.html', {'errors': errors}, context_instance=RequestContext(request))
 	
 	#GET request signifies that someone is asking for the form to add courses
 	elif request.method == 'GET':
-		return render_to_response('course/add.html')
+		return render_to_response('course/add.html', {}, context_instance=RequestContext(request))
 	
 	#We cannot process any request besides GET and POST
 	else:
@@ -60,7 +62,7 @@ def course_edit(request, course_short_name):
 		if c:
 			c.save()
 		t = c.topic_set.all()
-		return render_to_response('course/edit.html', {'course':c, 'topics':t})
+		return render_to_response('course/edit.html', {'course':c, 'topics':t}, context_instance=RequestContext(request))
 	
 	#GET request signifies that someone is asking for the form to add courses
 	elif request.method == 'GET':
@@ -69,7 +71,7 @@ def course_edit(request, course_short_name):
 			c = Course.objects.get(short_name=course_short_name)
 			#TODO: Get list of topics for this course and send them to the template page
 			t = c.topic_set.all()
-		return render_to_response('course/edit.html', {'course':c, 'topics':t})
+		return render_to_response('course/edit.html', {'course':c, 'topics':t}, context_instance=RequestContext(request))
 	
 	#We cannot process any request besides GET and POST
 	else:
@@ -79,7 +81,7 @@ def course_edit(request, course_short_name):
 
 def course_manager(request):
 	courses = Course.objects.all()
-	return render_to_response('managecourses.html', {'courses': courses})
+	return render_to_response('managecourses.html', {'courses': courses}, context_instance=RequestContext(request))
 
 
 def course_delete(request):
@@ -91,18 +93,18 @@ def course_delete(request):
 			if c:
 				c.delete()
 	courses = Course.objects.all()
-	return render_to_response('managecourses.html', {'msgs':msgs, 'courses':courses, 'errors':errors})
+	return render_to_response('managecourses.html', {'msgs':msgs, 'courses':courses, 'errors':errors}, context_instance=RequestContext(request))
 
 
 def topic_show(request, course_short_name, topic_id):
 	#Show the requested topic
 	t = Topic.objects.get(id=topic_id)
-	return render_to_response('topic/show.html', {'course_short_name':course_short_name, 'topic':t})
+	return render_to_response('topic/show.html', {'course_short_name':course_short_name, 'topic':t}, context_instance=RequestContext(request))
 
 def topic_add(request, course_short_name):
 	#User has asked for a form to add a topic to this course
 	if request.method == 'GET':
-		return render_to_response('topic/add.html', {'course_short_name':course_short_name})
+		return render_to_response('topic/add.html', {'course_short_name':course_short_name}, context_instance=RequestContext(request))
 	#User has posted data to add a topic
 	elif request.method == 'POST':
 		t = Topic()
@@ -113,13 +115,13 @@ def topic_add(request, course_short_name):
 		c = Course.objects.get(short_name=request.POST['course_short_name'])
 		t.course.add(c)
 		t.save()
-		return render_to_response('topic/add.html', {'course_short_name':course_short_name, 'errors':['topic saved']})
+		return render_to_response('topic/add.html', {'course_short_name':course_short_name, 'errors':['topic saved']}, context_instance=RequestContext(request))
 
 def topic_edit(request, course_short_name, topic_id):
 	#The user has asked to view topic details
 	if request.method == 'GET':
 		topic = Topic.objects.get(id=topic_id)
-		return render_to_response('topic/edit.html', {'topic':topic, 'course_short_name':course_short_name})
+		return render_to_response('topic/edit.html', {'topic':topic, 'course_short_name':course_short_name}, context_instance=RequestContext(request))
 
 
 def topic_edit_save(request):
@@ -132,7 +134,7 @@ def topic_edit_save(request):
 		topic.save()
 		course = Course.objects.get(short_name=request.POST['course_short_name'])
 		topics = course.topic_set.all()
-		return render_to_response('course/edit.html', {'course':course, 'topics':topics})
+		return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
 
 def topic_delete(request, course_short_name):
 	msgs = []
@@ -145,4 +147,4 @@ def topic_delete(request, course_short_name):
 			course.topic_set.remove(topic)
 	course = Course.objects.get()
 	topics = course.topic_set.all()
-	return render_to_response('course/edit.html', {'course':course, 'topics':topics})
+	return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))

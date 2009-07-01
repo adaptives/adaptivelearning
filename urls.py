@@ -1,4 +1,5 @@
 from django.conf.urls.defaults import *
+from django.contrib.auth.views import login, logout
 import settings
 from adaptivelearning.views import manage
 from al.views import course_list
@@ -14,8 +15,8 @@ from al.views import topic_show
 from al.views import topic_delete
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
@@ -26,7 +27,9 @@ urlpatterns = patterns('',
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
+    (r'^admin/', include(admin.site.urls)),
+    (r'^accounts/login/$', login),
+    (r'^accounts/logout/$', logout, {'next_page':'/'}),
 		(r'^site-media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 		(r'^$', course_list),
 		(r'^course/show/(.*)/$', course_show),
