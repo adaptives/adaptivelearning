@@ -71,6 +71,7 @@ TEMPLATE_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
 		'/home/pshah/workspaces/adaptivelearning/templates',
 		'/home/pshah/workspaces/adaptivelearning/al/templates',
+		'/home/pshah/bin/django_src/django/contrib/admin/templates',
 )
 
 INSTALLED_APPS = (
