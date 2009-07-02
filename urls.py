@@ -20,7 +20,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Example:
-    # (r'^adaptivelearning/', include('adaptivelearning.foo.urls')),
+    # (r'^adaptivelearnin/', include('adaptivelearning.foo.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
@@ -28,6 +28,7 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     (r'^admin/', include(admin.site.urls)),
+		(r'^admin/admin/logout/$', logout, {'next_page':'/'}),
     (r'^accounts/login/$', login),
     (r'^accounts/logout/$', logout, {'next_page':'/'}),
 		(r'^site-media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
