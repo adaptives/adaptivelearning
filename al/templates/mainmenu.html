@@ -1,7 +1,7 @@
 <div class="menu">
 	<a href="/">Home</a>&nbsp;&nbsp;
 	<a href="/manage/">Manage Site</a>&nbsp;&nbsp;
-	{% if request.user.username %}
+	{% if user.is_authenticated %}
 		<a href="/accounts/logout?next_page=/">logout</a>
 		{{ request.user.username }}
 	{% else %}
