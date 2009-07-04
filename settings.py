@@ -1,4 +1,5 @@
 # Django settings for adaptivelearning project.
+import hosting
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -10,9 +11,10 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'adaptivelearning'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'mysql1root2user3'         # Not used with sqlite3.
+DATABASE_NAME = ''             # Or path to database file if using sqlite3.
+DATABASE_USER = ''             # Not used with sqlite3.
+DATABASE_PASSWORD = ''         # Not used with sqlite3.
+
 DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
 DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
 
@@ -48,7 +50,7 @@ MEDIA_URL = ''
 ADMIN_MEDIA_PREFIX = '/media/'
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'n@62*#z)9-&rjy9j!*i4y2a5(fz)r73qo1-46rbl0_6r67d4oy'
+SECRET_KEY = ''
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -90,3 +92,10 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 		'adaptivelearning.apps.courses',
 )
+
+if(hosting.use):
+	DATABASE_NAME = hosting.DATABASE_NAME
+	DATABASE_USER = hosting.DATABASE_USER
+	DATABASE_PASSWORD = hosting.DATABASE_PASSWORD
+	SECRET_KEY = hosting.SECRET_KEY
+
