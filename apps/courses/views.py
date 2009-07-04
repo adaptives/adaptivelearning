@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from al.models import Course
-from al.models import Topic
+from apps.courses.models import Course
+from apps.courses.models import Topic
 
 def course_list(request):
 	print "user: ", request.user.username
@@ -79,6 +79,10 @@ def course_edit(request, course_short_name):
 		#error msg???
 
 
+def manage(request):
+	return render_to_response('manage.html')
+
+
 def course_manager(request):
 	courses = Course.objects.all()
 	return render_to_response('managecourses.html', {'courses': courses}, context_instance=RequestContext(request))
@@ -137,6 +141,7 @@ def topic_edit_save(request):
 		return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
 
 def topic_delete(request, course_short_name):
+	print "course_short_name: ", course_short_name
 	msgs = []
 	errors = []
 	for course_topic, on_of in request.POST.items():
@@ -145,6 +150,6 @@ def topic_delete(request, course_short_name):
 			course = Course.objects.get(short_name=tokens[0])
 			topic = Topic.objects.get(id=tokens[1])
 			course.topic_set.remove(topic)
-	course = Course.objects.get()
+	course = Course.objects.get(short_name=course_short_name)
 	topics = course.topic_set.all()
 	return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))

@@ -1,0 +1,20 @@
+{% extends "alsuper.html" %}
+{% block content%}
+<a href="/courses/manage/course/add/">Add Course</a>
+<p>
+<form action="/courses/manage/course/deletes/" method="POST">
+	<p>
+	<table border="1">
+{% for course in courses %}
+		<tr>
+			<td><input type="checkbox" name="{{course.short_name}}" /></td><td>{{course.short_name}} {{course.name}}</td><td><a href="/courses/manage/course/edit/{{course.short_name}}">Edit</a></td>
+		</tr>
+{%endfor%}
+		<tr>
+			<td><input type="submit" value="Delete" /></td><td><button>Cancel</button></td>
+		</tr>
+	</table>
+	</p>
+</form>
+</p>
+{% endblock %}

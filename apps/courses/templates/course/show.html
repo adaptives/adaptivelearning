@@ -11,7 +11,7 @@
 <h2>COURSE TOPICS</h2>
 <table>
 	{%for topic in topics%}
-		<tr><td><a href="/topic/show/{{course.short_name}}/{{topic.id}}">{{topic.title}}</a></td></tr>
+		<tr><td><a href="/courses/course/topic/show/{{course.short_name}}/{{topic.id}}">{{topic.title}}</a></td></tr>
 	{%endfor%}
 </table>
 {% endblock %}
