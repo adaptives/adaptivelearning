@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.template import RequestContext
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from apps.courses.models import Course
 from apps.courses.models import Topic
@@ -20,7 +21,7 @@ def course_show(request, course_short_name):
 		errors.append("could not find any course to display")
 		return render_to_response('/', {'errors':errors}, context_instance=RequestContext(request))
 
-
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def course_add(request):
 	
 	#POST request signifies that someone is trying to add a course
@@ -46,6 +47,7 @@ def course_add(request):
 		#error msg???
 
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def course_edit(request, course_short_name):
 	#POST request signifies that someone is trying to add a course
 	if request.method == 'POST':
@@ -79,15 +81,18 @@ def course_edit(request, course_short_name):
 		#error msg???
 
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def manage(request):
 	return render_to_response('manage.html')
 
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def course_manager(request):
 	courses = Course.objects.all()
 	return render_to_response('managecourses.html', {'courses': courses}, context_instance=RequestContext(request))
 
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def course_delete(request):
 	msgs = []
 	errors = []
@@ -105,6 +110,7 @@ def topic_show(request, course_short_name, topic_id):
 	t = Topic.objects.get(id=topic_id)
 	return render_to_response('topic/show.html', {'course_short_name':course_short_name, 'topic':t}, context_instance=RequestContext(request))
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_add(request, course_short_name):
 	#User has asked for a form to add a topic to this course
 	if request.method == 'GET':
@@ -121,6 +127,7 @@ def topic_add(request, course_short_name):
 		t.save()
 		return render_to_response('topic/add.html', {'course_short_name':course_short_name, 'errors':['topic saved']}, context_instance=RequestContext(request))
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_edit(request, course_short_name, topic_id):
 	#The user has asked to view topic details
 	if request.method == 'GET':
@@ -128,6 +135,7 @@ def topic_edit(request, course_short_name, topic_id):
 		return render_to_response('topic/edit.html', {'topic':topic, 'course_short_name':course_short_name}, context_instance=RequestContext(request))
 
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_edit_save(request):
 	#The user has posted data to edit a course's topic
 	if request.method == 'POST':
@@ -140,6 +148,7 @@ def topic_edit_save(request):
 		topics = course.topic_set.all()
 		return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_delete(request, course_short_name):
 	print "course_short_name: ", course_short_name
 	msgs = []
