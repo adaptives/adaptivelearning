@@ -1,17 +1,38 @@
 {% extends "alsuper.html" %}
 {% block content%}
+<script type="text/javascript">
+	var rows;
+	$(document).ready(function() {
+		//Initializing the table
+		$("#courses-table").tableDnD({
+			onDrop: function(table, row) {
+				rows = table.tBodies[0].rows;
+			} 
+		});
+	});
+
+	function get_row_order() {
+		var row_str='';
+		for(var i=0; i < rows.length; i++) {
+			row_str += rows[i].id + ','
+		}
+		$.post("/courses/manage/courses/reorder/",	{'order': row_str},	function(data) {$("div#msg").text(data);});
+	}
+</script>
+
 <a href="/courses/manage/course/add/">Add Course</a>
+<div id="msg"></div>
 <p>
 <form action="/courses/manage/course/deletes/" method="POST">
 	<p>
-	<table border="1">
+	<table id="courses-table" border="1">
 {% for course in courses %}
-		<tr>
-			<td><input type="checkbox" name="{{course.short_name}}" /></td><td>{{course.short_name}} {{course.name}}</td><td><a href="/courses/manage/course/edit/{{course.short_name}}">Edit</a></td>
+		<tr id="{{course.short_name}}">
+			<td><input type="checkbox" name="{{course.short_name}}" /></td><td>move</td><td>{{course.short_name}} {{course.name}}</td><td><a href="/courses/manage/course/edit/{{course.short_name}}">Edit</a></td>
 		</tr>
 {%endfor%}
 		<tr>
-			<td><input type="submit" value="Delete" /></td><td><button>Cancel</button></td>
+			<td><input type="button" value="ChangeOrder" name="change_order_button" onClick="get_row_order()" /></td><td><input type="submit" value="Delete" /></td><td><button>Cancel</button></td>
 		</tr>
 	</table>
 	</p>

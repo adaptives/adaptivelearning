@@ -4,10 +4,12 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from apps.courses.models import Course
 from apps.courses.models import Topic
+from apps.courses.models import TopicOrder
+from apps.courses.models import CourseOrder
 
 def course_list(request):
 	print "user: ", request.user.username
-	courses = Course.objects.all()
+	courses = get_sorted_courses()
 	return render_to_response('index.html', {'courses':courses}, context_instance=RequestContext(request))
 
 
@@ -15,7 +17,7 @@ def course_show(request, course_short_name):
 	errors = []
 	if(course_short_name):
 		course = Course.objects.get(short_name=course_short_name)
-		topics = course.topic_set.all()
+		topics = get_sorted_topics(course)
 		return render_to_response('course/show.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
 	else:
 		errors.append("could not find any course to display")
@@ -64,7 +66,10 @@ def course_edit(request, course_short_name):
 		if c:
 			c.save()
 		t = c.topic_set.all()
-		return render_to_response('course/edit.html', {'course':c, 'topics':t}, context_instance=RequestContext(request))
+		sorted_topics = get_sorted_topics(c)
+		#if t.size() > sorted_topics.size():
+		#	sorted_topics = t
+		return render_to_response('course/edit.html', {'course':c, 'topics':sorted_topics}, context_instance=RequestContext(request))
 	
 	#GET request signifies that someone is asking for the form to add courses
 	elif request.method == 'GET':
@@ -73,7 +78,8 @@ def course_edit(request, course_short_name):
 			c = Course.objects.get(short_name=course_short_name)
 			#TODO: Get list of topics for this course and send them to the template page
 			t = c.topic_set.all()
-		return render_to_response('course/edit.html', {'course':c, 'topics':t}, context_instance=RequestContext(request))
+			sorted_topics = get_sorted_topics(c)
+		return render_to_response('course/edit.html', {'course':c, 'topics':sorted_topics}, context_instance=RequestContext(request))
 	
 	#We cannot process any request besides GET and POST
 	else:
@@ -88,7 +94,7 @@ def manage(request):
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def course_manager(request):
-	courses = Course.objects.all()
+	courses = get_sorted_courses()
 	return render_to_response('managecourses.html', {'courses': courses}, context_instance=RequestContext(request))
 
 
@@ -105,10 +111,67 @@ def course_delete(request):
 	return render_to_response('managecourses.html', {'msgs':msgs, 'courses':courses, 'errors':errors}, context_instance=RequestContext(request))
 
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
+def courses_reorder(request):
+	course_short_names = request.POST['order'].split(',')
+	msg = ''
+	count = 0
+	for course_short_name in course_short_names:
+		count += 1
+		if(course_short_name == ''):
+			continue
+		print "setting order for course %s to %d" % (course_short_name, count)
+		try:
+			course = Course.objects.get(short_name=course_short_name)
+			try:
+				co = CourseOrder.objects.get(course=course)
+				print "Obtained existing course"
+			except:
+				co = CourseOrder(course=course, order=count)
+				print "Created new course"
+			co.order = count
+			co.save()
+			msg = 'Course reordering complete'
+		except Exception, e:
+			print "Could not reorder courses ", e
+			msg = 'Course reordering faile ', e
+	return HttpResponse(msg)
+
 def topic_show(request, course_short_name, topic_id):
 	#Show the requested topic
 	t = Topic.objects.get(id=topic_id)
 	return render_to_response('topic/show.html', {'course_short_name':course_short_name, 'topic':t}, context_instance=RequestContext(request))
+
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
+def topic_reorder(request, course_short_name):
+	print "processing topic reordering request: " + request.POST['order']
+	msg = ''
+	topic_ids = request.POST['order'].split(',')
+	count = 0
+	for topic_id in topic_ids:
+		count += 1
+		if topic_id == '':
+			continue
+		print "setting order for course %s topic %s order %d" % (course_short_name, topic_id, count)
+		try:
+			course = Course.objects.get(short_name = course_short_name)
+			topic = Topic.objects.get(id = int(topic_id))
+			to = None
+			try:
+				to = TopicOrder.objects.get(course=course, topic=topic)
+				print "Obtained existing topic"
+			except:
+				to = TopicOrder(course=course, topic=topic, order=count)
+				print "Created new topic"
+			to.order = count
+			#(to, created) = TopicOrder.objects.get_or_create(course=course, topic=topic)
+			to.save()
+			msg = 'Topic ordering successfull'
+		except Exception, x:
+			print "could not save TopicOrder object ", x
+			msg = 'Topic ordering failed because ' + x
+	return HttpResponse(msg);
+	
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_add(request, course_short_name):
@@ -162,3 +225,20 @@ def topic_delete(request, course_short_name):
 	course = Course.objects.get(short_name=course_short_name)
 	topics = course.topic_set.all()
 	return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
+
+def get_forum_questions(request):
+	return HttpResponse('questions')
+
+def get_sorted_courses():
+	course_orders = CourseOrder.objects.all()
+	course_order_list = list(course_orders)
+	course_order_list.sort(lambda x, y: cmp(x.order, y.order))
+	sorted_courses = [course_order.course for course_order in course_order_list]
+	return sorted_courses
+
+def get_sorted_topics(course):
+	topic_orders = TopicOrder.objects.filter(course=course)
+	topic_order_list = list(topic_orders)
+	topic_order_list.sort(lambda x, y:  cmp(x.order,y.order))
+	sorted_topics = [topic_order.topic for topic_order in topic_order_list]
+	return sorted_topics

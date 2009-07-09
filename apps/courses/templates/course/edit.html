@@ -3,6 +3,27 @@
 Edit the course
 {% endblock %}
 {% block content%}
+<script type="text/javascript">
+	var rows;
+	$(document).ready(function() {
+		//Initializing the table
+		$("#topic-table").tableDnD({
+			onDrop: function(table, row) {
+				rows = table.tBodies[0].rows;
+				//rows = $.tableDnD.serialize();
+			} 
+		});
+	});
+
+	function get_row_order() {
+		var row_str='';
+		for(var i=0; i < rows.length; i++) {
+			row_str += rows[i].id + ','
+		}
+		//$.post("/courses/manage/course/topic/reorder/{{course.short_name}}/",	{'order': rows},	function(data) { alert(data);});
+		$.post("/courses/manage/course/topic/reorder/{{course.short_name}}/",	{'order': row_str},	function(data) {$("div#msg").text(data);});
+	}
+</script>
 <p>
 <form action="/courses/manage/course/edit/" method="POST">
 	Short Name: <input type="text" name="short_name" value="{% if course %}{{course.short_name}}{%endif%}"><br><br>
@@ -14,16 +35,23 @@ Edit the course
 <p>
 	<a href="/courses/manage/course/topic/add/{{course.short_name}}">Add a topic to this course</a>
 </p>
+<div id="msg">
+
+</div>
 <p>
 	<form action="/courses/manage/course/topic/deletes/{{course.short_name}}" method="POST">
-	<table>
+	<table id="topic-table">
 	{%for topic in topics%}
-		<tr>
+		<tr id="{{topic.id}}">
 			<td><input type="checkbox" name="{{course.short_name}}_{{topic.id}}"/></td>
+			<td>move</td>
 			<td><a href="/courses/manage/course/topic/edit/{{course.short_name}}/{{topic.id}}">{{topic.title}}</a></td>
 		</tr>
 	{%endfor%}
+	</table>
+	<table>
 		<tr>
+			<td><input type="button" value="Change Order" name="change_order_button" onClick="get_row_order()"/></td>
 			<td><input type="submit" value="Delete"></td>
 			<td><button>Cancel</button></td>
 		</tr>
