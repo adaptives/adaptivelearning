@@ -29,21 +29,22 @@ class TopicOrder(models.Model):
 		return u"Course[%s] Topic[%s] Order - %d" % (self.course, self.topic, self.order)
 
 class Forum(models.Model):
-	url = models.CharField(max_length=256, primary_key=True)
+	url = models.CharField(max_length=255, primary_key=True)
 
 	def __unicode__(self):
 		return u"%s" % (self.url)
 
 class Question(models.Model):
+	title = models.CharField(max_length=255)
 	text = models.TextField()
-	forum = models.ForeignKey(Forum)
+	forum = models.ForeignKey(Forum, related_name='questions')
 
 	def __unicode__(self):
 		return u"forum [%s] %s" % (self.forum, smart_truncate(self.text))
 
-class Answer():
+class Answer(models.Model):
 	text = models.TextField()
-	question = models.ForeignKey(Question)
+	question = models.ForeignKey(Question, related_name='answers')
 
 	def __unicode__(self):
 		return u"question [%s] answer [%s] " % (smart_truncate(question), smart_truncate(text))

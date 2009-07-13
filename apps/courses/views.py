@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.core import serializers
 from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
@@ -6,6 +7,8 @@ from apps.courses.models import Course
 from apps.courses.models import Topic
 from apps.courses.models import TopicOrder
 from apps.courses.models import CourseOrder
+from apps.courses.models import Forum
+from apps.courses.models import Question
 
 def course_list(request):
 	print "user: ", request.user.username
@@ -227,7 +230,51 @@ def topic_delete(request, course_short_name):
 	return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
 
 def get_forum_questions(request):
-	return HttpResponse('questions')
+	res = ''
+	if request.method == 'GET':
+		forum_url = request.GET['url']
+		try:
+			forum = Forum.objects.get(url=forum_url)
+			questions = forum.questions.all()
+			res = serializers.serialize("json", questions)
+			return HttpResponse(res, mimetype="application/javascript")
+		except Exception, e:
+			print "Error: Could not process request: ", e
+			res = "[{'error':'Could not process request'}]"
+	elif request.method == 'POST':
+		print "Received question"
+		try:
+			url = request.POST['url']
+			title = request.POST['title']
+			text = request.POST['question']
+			forum = Forum.objects.get(url=url)
+			questionModel = Question()
+			questionModel.forum = forum
+			questionModel.title = title
+			questionModel.text = text
+			questionModel.save()
+			return HttpResponse(res)
+		except Exception, e:
+			print "Could not save question because: ", e
+			res = "[{'error':'Could not process request'}]"
+			return HttpResponse(res)
+	else:
+		res = "[{'error':'Could not process request'}]"
+		return HttpResponse(res)
+
+
+def get_answers_for_question(request, question_id):
+	print "Getting answers for = " + question_id
+	try:
+		question = Question.objects.get(pk=int(question_id))
+		answers = question.answers.all()
+		res = serializers.serialize("json", answers)
+		print "Answers are: " + res
+		return HttpResponse(res, mimetype="application/javascript")
+	except Exception, e:
+		print "Could not process request because: ", e
+		return "[{'error':'Could not process request'}]"
+
 
 def get_sorted_courses():
 	course_orders = CourseOrder.objects.all()

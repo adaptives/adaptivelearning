@@ -63,6 +63,11 @@ body, h2 {
 	font-family: 'Trebuchet MS', Trebuchet, Verdana, sans-serif; font-size: 14px; letter-spacing: 3px; font-weight: bold; 
 }
 
+#questionsHeader {
+	background:#EB9420;
+	color:#000000;
+	font-family: 'Trebuchet MS', Trebuchet, Verdana, sans-serif; font-size: 14px; letter-spacing: 3px; font-weight: bold; 
+}
 
 a:link, a:visited {
 	color:#4EAE75;
@@ -100,4 +105,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .course_short_name {
 	color:#4EAE75;
+}
+
+#answer {
+	border: 1px dotted #EB9420;
 }

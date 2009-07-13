@@ -1,5 +1,32 @@
 {% extends "alsuper.html" %}
 {% block content %}
+<script type="text/javascript">
+
+$(document).ready(function() {
+	//$("a").live("click", function() {
+		//alert('clickety');
+	//});
+});
+
+function question_clicked(id) {
+	var selector = "div#forum div#answer"
+	$.getJSON('/courses/course/question/answers/'+id+'/', function(data) {
+		$(selector).html(questions[id]);
+		$.each(data, function(i, item) {
+			$(selector).append("<p>" + item.fields.text + "</p>");
+		});
+	});
+}
+
+function ask_question() {
+	var title = $("div#forum table#question_form tr td input#title").val();
+	var question = $("div#forum table#question_form tr td textarea#question").val();
+  $.post("/courses/course/topic/questions/", {'url':'/courses/course/topic/ENTPR/12', 'title': title, 'question': question},
+          function() {
+            alert('your question has been posted');
+          });
+}
+</script>
 <p>
 	Return to course <a href="/courses/course/show/{{course_short_name}}">{{course_short_name}}</a>
 </p>
@@ -10,9 +37,24 @@
 {{topic.content|safe}}
 </p>
 
-<h2>Questions</h2>
-<div id="forum">
-</div>
 <script type="text/javascript" src="/site-media/al/aforum.js"></script>
+<div id="forum">
+<h2 id="questionsHeader">Questions</h2>
+<div id="questions">
+</div>
+<div id="answer"></div>
+<div>Ask a new question</div>
+<table id="question_form">
+	<tr>
+		<td><input type="text" id="title" name="title" value="" / ></td>
+	</tr>
+	<tr>
+		<td><textarea rows="5" cols="35" id="question" name="question"></textarea></td>
+	</tr>
+	<tr>
+		<td><input type="button" value="Ask Question" onClick="ask_question()" /></td>
+	</td>
+</table>
+</div>
 {% endblock %}
 
