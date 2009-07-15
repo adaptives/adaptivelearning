@@ -8,22 +8,53 @@ $(document).ready(function() {
 	//});
 });
 
-function question_clicked(id) {
-	var selector = "div#forum div#answer"
-	$.getJSON('/courses/course/question/answers/'+id+'/', function(data) {
-		$(selector).html(questions[id]);
-		$.each(data, function(i, item) {
-			$(selector).append("<p>" + item.fields.text + "</p>");
-		});
+var q_status = {};
+
+function answer_question(q_id) {
+	$.post('/courses/course/question/submit_answer/'+q_id+'/', {'answer':$('textarea#answer').val()}, function(data) {
+		alert(data);
+		$("div#forum div#questions p#"+q_id+" div#qa").remove();
+		populate_answers(q_id);
 	});
+}
+
+function populate_answers(q_id) {
+	var selector = "div#forum div#questions p#"+q_id;
+	$.getJSON('/courses/course/question/answers/'+q_id+'/', function(data) {
+	$(selector).append("<div style='border: 1px dashed #D3D3D3; padding:20px;' id='qa'>" + 
+										  questions[q_id] + 
+											"<p style='font-weight:bold;'> " + data.length + " Answers </p>" +	
+										  "</div>");
+		$.each(data, function(i, item) {
+			$(selector + " div#qa").append("<p style='padding:20px; border-top: 1px solid #D3D3D3;'>" + item.fields.text + "</p>");
+		});
+		$(selector + " div#qa").append("<table id='question_form'>" + 
+																	 "<tr><td><textarea rows='10' cols='80' id='answer' name='answer'></textarea></td></tr>" + 
+													 				 "<tr><td><input type='button' value='Answer' onClick='answer_question(" + q_id + ")'/></td></tr>" + 
+																	 "</table>");
+		});
+}
+
+function question_clicked(q_id) {
+	//
+	var selector = "div#forum div#questions p#"+q_id;
+	if(q_id in q_status) {
+		delete(q_status[q_id]);
+		$(selector+" div#qa").remove();	
+	}
+	else {
+		q_status[q_id] = true;
+		populate_answers(q_id);		
+	}
 }
 
 function ask_question() {
 	var title = $("div#forum table#question_form tr td input#title").val();
 	var question = $("div#forum table#question_form tr td textarea#question").val();
-  $.post("/courses/course/topic/questions/", {'url':'/courses/course/topic/ENTPR/12', 'title': title, 'question': question},
+  $.post("/courses/course/topic/questions/", {'url':window.location.pathname, 'title': title, 'question': question},
           function() {
-            alert('your question has been posted');
+						$('table#question_form input#title').val('');
+						$('table#question_form textarea#question').val('');
           });
 }
 </script>
@@ -42,18 +73,16 @@ function ask_question() {
 <h2 id="questionsHeader">Questions</h2>
 <div id="questions">
 </div>
-<div id="answer"></div>
 <div>Ask a new question</div>
 <table id="question_form">
 	<tr>
 		<td><input type="text" id="title" name="title" value="" / ></td>
 	</tr>
 	<tr>
-		<td><textarea rows="5" cols="35" id="question" name="question"></textarea></td>
+		<td><textarea rows="10" cols="80" id="question" name="question"></textarea></td>
 	</tr>
 	<tr>
 		<td><input type="button" value="Ask Question" onClick="ask_question()" /></td>
-	</td>
 </table>
 </div>
 {% endblock %}

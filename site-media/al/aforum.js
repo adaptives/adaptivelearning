@@ -13,17 +13,27 @@ function get_questions() {
 };
 */
 //get_questions();
-function contains(obj, element) {
-	var i =0;
-	for(i=0;i<obj.length;i++) {
-		if(obj[i] == element) {
-			return true;
-		}
-	}
-	return false;
-}
 
 var questions = {};
+
+function update_questions(data) {
+	$.each(data, function(i, item) {
+		if(item.error) {
+			alert('This was an error while processing this page');
+		}
+		else {
+			if(!(item.pk in questions)) {
+				questions[item.pk] = item.fields.text;
+				$("div#questions").append("<p id='" + item.pk + "'><a href='javascript:question_clicked(" + item.pk + ")'>" + item.fields.title + "</a></p>");
+			}
+		}
+	});
+}
+
+$.getJSON("/courses/course/topic/questions/?url=" + window.location.pathname, function(data) {
+	update_questions(data);
+});
+
 $("div#questions").poll({
     url: "/courses/course/topic/questions/?url=" + window.location.pathname,
     success: function(data){
@@ -34,7 +44,7 @@ $("div#questions").poll({
 				else {
 					if(!(item.pk in questions)) {
 						questions[item.pk] = item.fields.text;
-						$("div#questions").append("<p><a href='javascript:question_clicked(" + item.pk + ")'>" + item.fields.title + "</a></p>");
+						$("div#questions").append("<p id='" + item.pk + "'><a href='javascript:question_clicked(" + item.pk + ")'>" + item.fields.title + "</a></p>");
 					}
 				}
 			});

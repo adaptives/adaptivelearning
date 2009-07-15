@@ -9,6 +9,7 @@ from apps.courses.models import TopicOrder
 from apps.courses.models import CourseOrder
 from apps.courses.models import Forum
 from apps.courses.models import Question
+from apps.courses.models import Answer
 
 def course_list(request):
 	print "user: ", request.user.username
@@ -273,8 +274,23 @@ def get_answers_for_question(request, question_id):
 		return HttpResponse(res, mimetype="application/javascript")
 	except Exception, e:
 		print "Could not process request because: ", e
-		return "[{'error':'Could not process request'}]"
+		return HttpResponse("[{'error':'Could not process request'}]")
 
+
+def submit_answer(request, question_id):
+	print "Received the answer for question " + question_id
+	try:
+		answer = request.POST['answer']
+		if not answer:
+			answer = ''
+		question = Question.objects.get(pk=int(question_id))
+		answer = Answer(text=answer)
+		answer.question = question
+		answer.save()
+		return HttpResponse('Thanks')
+	except Exception, e:
+		print 'answer could not be saved: ', e
+		return HttpResponse('Sorry but your answer could not be processed')
 
 def get_sorted_courses():
 	course_orders = CourseOrder.objects.all()
