@@ -1,10 +1,12 @@
 <div class="menu">
 	<a href="/">Home</a>&nbsp;&nbsp;
-	<a href="/courses/manage/">Manage Site</a>&nbsp;&nbsp;
 	{% if user.is_authenticated %}
+		{% if user.is_staff %}
+			<a href="/courses/manage/">Manage Site</a>&nbsp;&nbsp;
+		{% endif %}
 		<a href="/accounts/logout?next_page=/">logout</a>
 		{{ request.user.username }}
 	{% else %}
-		<a href="/accounts/login">login</a>
+		<a href="/accounts/login">login</a> / <a href="/registration">register</a>
 	{% endif %}
 </div>
