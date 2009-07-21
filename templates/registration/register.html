@@ -7,6 +7,8 @@
 
   <form action="" method="post">
       {{ form.as_p }}
+			<label for='id_website'> Website: </label> <input type='text' name='website' id='id_website'/><br>
+			<label for='id_timezone'> Timezone: <input type='text' name='timezone' id='is_timezone'/><br>
       <input type="submit" value="Create the account">
   </form>
 {% endblock %}

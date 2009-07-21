@@ -93,6 +93,8 @@ INSTALLED_APPS = (
 		'adaptivelearning.apps.courses',
 )
 
+AUTH_PROFILE_MODULE = 'courses.userprofile'
+
 if(hosting.use):
 	DATABASE_NAME = hosting.DATABASE_NAME
 	DATABASE_USER = hosting.DATABASE_USER

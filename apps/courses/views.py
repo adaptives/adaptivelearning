@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
 from apps.courses.models import Course
 from apps.courses.models import Topic
@@ -37,10 +38,20 @@ def course_add(request):
 		short_name = request.POST['short_name']
 		name = request.POST['name']
 		description = request.POST.get('description', '')
-		if not errors:
-			print "Thanks for creating a course %s - %s - %s" % (short_name, name, description)
-			c = Course(short_name=short_name, name=name, description=description)
-			c.save()
+		print "Thanks for creating a course %s - %s - %s" % (short_name, name, description)
+		c = Course(short_name=short_name, name=name, description=description)
+		c.save()
+		try:
+			course_order = CourseOrder.objects.get(course=c)
+			print 'WARN: A course_order already exists for a course which was freshly created'
+		except CourseOrder.DoesNotExist:
+			course_order = CourseOrder(course=c)
+			course_orders = CourseOrder.objects.order_by('-order')[:1]
+			if course_orders:
+				course_order.order = course_orders[0].order + 1
+			else:
+				course_order.order=0
+		course_order.save()
 		return render_to_response('course/add.html', {'errors': errors}, context_instance=RequestContext(request))
 	
 	#GET request signifies that someone is asking for the form to add courses
@@ -93,7 +104,7 @@ def course_edit(request, course_short_name):
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def manage(request):
-	return render_to_response('manage.html')
+	return render_to_response('manage.html', context_instance=RequestContext(request))
 
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
@@ -230,6 +241,7 @@ def topic_delete(request, course_short_name):
 	topics = course.topic_set.all()
 	return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
 
+
 def get_forum_questions(request):
 	res = ''
 	if request.method == 'GET':
@@ -277,6 +289,7 @@ def get_answers_for_question(request, question_id):
 		return HttpResponse("[{'error':'Could not process request'}]")
 
 
+@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def submit_answer(request, question_id):
 	print "Received the answer for question " + question_id
 	try:
@@ -292,6 +305,31 @@ def submit_answer(request, question_id):
 		print 'answer could not be saved: ', e
 		return HttpResponse('Sorry but your answer could not be processed')
 
+@user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
+def user_profile(request):
+	print "EN user_profile"
+	errors = []
+	if request.method == 'GET':
+		return render_to_response('user_profile.html', context_instance=RequestContext(request))
+	elif request.method == 'POST':
+		user = User.objects.get(username=request.POST['username'])
+		user_profile = user.get_profile()
+		if request.POST['password1'] or request.POST['password2']:
+			if request.POST['password1'] == request.POST['password2']:
+				user.set_password(request.POST['password1'])
+				try:
+					user.save()
+				except Exception, e:
+					errors.append("Could not change password " + e)
+			else:
+				errors.append('password does not match retyped password')
+		if request.POST['website']:
+			user_profile.website = request.POST['website']
+		if request.POST['timezone']:
+			user_profile.timezone = request.POST['timezone']
+		user_profile.save()
+		return render_to_response('user_profile.html', {'errors': errors}, context_instance=RequestContext(request))
+
 def get_sorted_courses():
 	course_orders = CourseOrder.objects.all()
 	course_order_list = list(course_orders)
@@ -305,3 +343,4 @@ def get_sorted_topics(course):
 	topic_order_list.sort(lambda x, y:  cmp(x.order,y.order))
 	sorted_topics = [topic_order.topic for topic_order in topic_order_list]
 	return sorted_topics
+

@@ -1,0 +1,31 @@
+{% extends "alsuper.html" %}
+{% block header%}
+Profile:
+{% endblock %}
+{% block content %}
+<form action="" method="POST">
+	<table>
+	<tr>
+		<td><label for=''>username</label></td><td><input type='text' name='username' value='{{user.username}}' id='id_username' readonly/></td>
+	</tr>
+	<tr>
+		<td><label for=''>password</label></td><td><input type='password' name='password1' id='id_password1' /></td>
+	</tr>
+	<tr>
+		<td><label for=''>retype password</label></td><td><input type='password' name='password2' id='id_password2' /></td>
+	</tr>
+	<tr>
+		<td><label for=''>Website </label></td>
+		<td><input type='text' name='website' value='{{user.get_profile.website}}' id='id_website'/></td>
+	</tr>
+	<tr>
+		<td><label for=''>Timezone </label></td>
+		<td><input type='text' name='timezone' value='{{user.get_profile.timezone}}' id='id_timezone'/></td>
+	</tr>
+	<tr>
+		<td><input type='submit' value='submit' id='id_submit' /></td>
+	</tr>
+	</table>
+</form>
+{% endblock %}
+

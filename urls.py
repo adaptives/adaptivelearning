@@ -25,5 +25,6 @@ urlpatterns = patterns('',
 		(r'^site-media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 		(r'^$', 'adaptivelearning.apps.courses.views.course_list'),
 		(r'^registration/', 'adaptivelearning.views.register'),		
+		(r'^profile/', 'adaptivelearning.apps.courses.views.user_profile'),
 		(r'^courses/', include('adaptivelearning.apps.courses.urls')),
 )
