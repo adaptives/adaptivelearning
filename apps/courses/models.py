@@ -4,28 +4,28 @@ from django.db.models.signals import post_save
 
 class Course(models.Model):
 	short_name = models.CharField(max_length=10, primary_key=True)
-	name = models.CharField(max_length=100)
-	description = models.CharField(max_length=2048)
+	name = models.CharField(max_length=100, blank=False)
+	description = models.CharField(max_length=2048, blank=False)
 
 	def __unicode__(self):
 		return u"[%s] %s" % (self.short_name, self.name)
 
 class Topic(models.Model):
 	title = models.CharField(max_length=128)
-	content = models.TextField()
-	course = models.ManyToManyField(Course)
+	content = models.TextField(blank=False)
+	course = models.ManyToManyField(Course, blank=False)
 
 	def __unicode__(self):
 		return u"%s" % (self.title)
 
 class CourseOrder(models.Model):	
-	course = models.ForeignKey(Course)
-	order = models.IntegerField()
+	course = models.ForeignKey(Course, blank=False)
+	order = models.IntegerField(blank=False)
 	
 class TopicOrder(models.Model):	
-	course = models.ForeignKey(Course)
-	topic = models.ForeignKey(Topic)
-	order = models.IntegerField()
+	course = models.ForeignKey(Course, blank=False)
+	topic = models.ForeignKey(Topic, blank=False)
+	order = models.IntegerField(blank=False)
 	
 	def __unicode__(self):
 		return u"Course[%s] Topic[%s] Order - %d" % (self.course, self.topic, self.order)
@@ -37,23 +37,25 @@ class Forum(models.Model):
 		return u"%s" % (self.url)
 
 class Question(models.Model):
-	title = models.CharField(max_length=255)
+	title = models.CharField(max_length=255, blank=False)
 	text = models.TextField()
-	forum = models.ForeignKey(Forum, related_name='questions')
+	forum = models.ForeignKey(Forum, related_name='questions', blank=False)
+	user = models.ForeignKey(User, blank=False, to_field='username')
 
 	def __unicode__(self):
-		return u"forum [%s] %s" % (self.forum, smart_truncate(self.text))
+		return u"forum [%s] question [%s] user [%s]" % (self.forum, smart_truncate(self.text), self.user)
 
 class Answer(models.Model):
-	text = models.TextField()
-	question = models.ForeignKey(Question, related_name='answers')
+	text = models.TextField(blank=False)
+	question = models.ForeignKey(Question, related_name='answers', blank=False)
+	user = models.ForeignKey(User, blank=False)
 
 	def __unicode__(self):
-		return u"question [%s] answer [%s] " % (smart_truncate(question), smart_truncate(text))
+		return u"question [%s] answer [%s] user [%s]" % (smart_truncate(question), smart_truncate(text), self.user)
 
 
 class UserProfile(models.Model):
-	user = models.ForeignKey(User, unique=True, related_name='profile')
+	user = models.ForeignKey(User, unique=True, related_name='profile', blank=False)
 	website = models.CharField(max_length=255)
 	timezone = models.CharField(max_length="20")
 	
