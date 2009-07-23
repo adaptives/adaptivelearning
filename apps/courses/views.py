@@ -241,20 +241,28 @@ def topic_delete(request, course_short_name):
 	topics = course.topic_set.all()
 	return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))
 
-
 def get_forum_questions(request):
 	res = ''
 	if request.method == 'GET':
 		forum_url = request.GET['url']
 		try:
-			forum = Forum.objects.get(url=forum_url)
+			forum = Forum.objects.select_related().get(url=forum_url)
 			questions = forum.questions.all()
+			for question in questions:
+				print question.user.username
 			res = serializers.serialize("json", questions)
 			return HttpResponse(res, mimetype="application/javascript")
 		except Exception, e:
 			print "Error: Could not process request: ", e
 			res = "[{'error':'Could not process request'}]"
-	elif request.method == 'POST':
+	else:
+		res = "[{'error':'Could not process request'}]"
+		return HttpResponse(res)
+
+@user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
+def submit_question(request):
+	res = ''
+	if request.method == 'POST':
 		print "Received question"
 		try:
 			url = request.POST['url']
@@ -265,14 +273,17 @@ def get_forum_questions(request):
 			questionModel.forum = forum
 			questionModel.title = title
 			questionModel.text = text
+			questionModel.user = request.user
 			questionModel.save()
 			return HttpResponse(res)
 		except Exception, e:
-			print "Could not save question because: ", e
-			res = "[{'error':'Could not process request'}]"
+			msg = "Could not save question because: " +  e
+			print msg
+			res = "[{'error':" + msg + "}]"
 			return HttpResponse(res)
 	else:
-		res = "[{'error':'Could not process request'}]"
+		msg = "Could not process request for method " + request.method
+		res = "[{'error':'Could not process request method'" + request.method + "}]"
 		return HttpResponse(res)
 
 

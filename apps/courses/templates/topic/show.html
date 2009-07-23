@@ -51,7 +51,7 @@ function question_clicked(q_id) {
 function ask_question() {
 	var title = $("div#forum table#question_form tr td input#title").val();
 	var question = $("div#forum table#question_form tr td textarea#question").val();
-  $.post("/courses/course/topic/questions/", {'url':window.location.pathname, 'title': title, 'question': question},
+  $.post("/courses/course/topic/questions/submit/", {'url':window.location.pathname, 'title': title, 'question': question},
           function() {
 						$('table#question_form input#title').val('');
 						$('table#question_form textarea#question').val('');
