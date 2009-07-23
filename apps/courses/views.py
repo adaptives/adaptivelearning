@@ -36,6 +36,7 @@ def course_add(request):
 		errors = []
 		#add/edit the course to the db
 		short_name = request.POST['short_name']
+		print 'short_name of course to be added -' + short_name + "-"
 		name = request.POST['name']
 		description = request.POST.get('description', '')
 		print "Thanks for creating a course %s - %s - %s" % (short_name, name, description)
@@ -312,16 +313,17 @@ def get_answers_for_question(request, question_id):
 		return HttpResponse("[{'error':'Could not process request'}]")
 
 
-@user_passes_test(lambda u: u.is_staff, "/accounts/login/")
+@user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
 def submit_answer(request, question_id):
 	print "Received the answer for question " + question_id
 	try:
-		answer = request.POST['answer']
-		if not answer:
-			answer = ''
+		answer_text = request.POST['answer']
+		if not answer_text:
+			answer_text = ''
 		question = Question.objects.get(pk=int(question_id))
-		answer = Answer(text=answer)
+		answer = Answer(text=answer_text)
 		answer.question = question
+		answer.user = request.user
 		answer.save()
 		return HttpResponse('Thanks')
 	except Exception, e:
