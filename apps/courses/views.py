@@ -203,6 +203,18 @@ def topic_add(request, course_short_name):
 		c = Course.objects.get(short_name=request.POST['course_short_name'])
 		t.course.add(c)
 		t.save()
+		topic_order = TopicOrder(course=c, topic=t)
+		topic_orders = TopicOrder.objects.filter(course=c).order_by('-order')[:1]
+		if topic_orders:
+			topic_order.order = topic_orders[0].order + 1
+		else:
+			topic_order.order = 0
+		topic_order.save()
+		print 'short_name *%s*' % (c.short_name)
+		forum_url = "/courses/course/topic/show/"+c.short_name+"/"+str(t.pk)
+		print 'creating forum with url *' + forum_url + '*'
+		forum = Forum(url=forum_url)
+		forum.save()
 		return render_to_response('topic/add.html', {'course_short_name':course_short_name, 'errors':['topic saved']}, context_instance=RequestContext(request))
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
