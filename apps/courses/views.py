@@ -197,12 +197,10 @@ def topic_add(request, course_short_name):
 	#User has posted data to add a topic
 	elif request.method == 'POST':
 		t = Topic()
-		t.id = None
 		t.title = request.POST['title']
 		t.content = request.POST['content']
-		t.save()
 		c = Course.objects.get(short_name=request.POST['course_short_name'])
-		t.course.add(c)
+		t.course = c
 		t.save()
 		topic_order = TopicOrder(course=c, topic=t)
 		topic_orders = TopicOrder.objects.filter(course=c).order_by('-order')[:1]
@@ -211,7 +209,6 @@ def topic_add(request, course_short_name):
 		else:
 			topic_order.order = 0
 		topic_order.save()
-		print 'short_name *%s*' % (c.short_name)
 		forum_url = "/courses/course/topic/show/"+c.short_name+"/"+str(t.pk)
 		print 'creating forum with url *' + forum_url + '*'
 		forum = Forum(url=forum_url)
@@ -249,7 +246,7 @@ def topic_delete(request, course_short_name):
 			tokens = course_topic.split('_')
 			course = Course.objects.get(short_name=tokens[0])
 			topic = Topic.objects.get(id=tokens[1])
-			course.topic_set.remove(topic)
+			topic.delete()
 	course = Course.objects.get(short_name=course_short_name)
 	topics = course.topic_set.all()
 	return render_to_response('course/edit.html', {'course':course, 'topics':topics}, context_instance=RequestContext(request))

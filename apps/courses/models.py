@@ -13,7 +13,7 @@ class Course(models.Model):
 class Topic(models.Model):
 	title = models.CharField(max_length=128)
 	content = models.TextField(blank=False)
-	course = models.ManyToManyField(Course, blank=False)
+	course = models.ForeignKey(Course, blank=False)
 
 	def __unicode__(self):
 		return u"%s" % (self.title)
