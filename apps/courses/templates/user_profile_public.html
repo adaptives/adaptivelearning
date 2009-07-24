@@ -3,7 +3,8 @@
 {% endblock %}
 {% block content %}
 <pre>
-<b>{{profiled_user.username}} Member since {{profiled_user.date_joined}} located in timezone {{profiled_user.get_profile.timezone}}</b>
+<b>{{profiled_user.username}} - Member since {{profiled_user.date_joined|date:"F Y"}} 
+{% if profiled_user.get_profile.timezone %}located in timezone {{profiled_user.get_profile.timezone}} {% endif %}</b>
 <br><b>Answered {{answers.count}} questions</b>
 <table>
 {%for answer in answers%}
