@@ -14,7 +14,7 @@ from apps.courses.models import Answer
 
 def course_list(request):
 	print "user: ", request.user.username
-	courses = get_sortedcourses()
+	courses = get_sorted_courses()
 	return render_to_response('index.html', {'courses':courses}, context_instance=RequestContext(request))
 
 
