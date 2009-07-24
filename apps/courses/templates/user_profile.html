@@ -27,5 +27,21 @@ Profile:
 	</tr>
 	</table>
 </form>
+<pre>
+<b>Member since {{user.date_joined}}</b>
+<br><b>Answered {{answers.count}} questions</b>
+<table>
+{%for answer in answers%}
+<tr><td><a href='{{answer.question.forum}}'>{{answer.question.title}}</a></td></tr>
+{%endfor%}
+</table>
+
+<br><b>Asked {{questions.count}} question{{questions.count|pluralize}}</b>
+<table>
+{% for question in questions %}
+<tr><td><a href='{{question.forum}}'>{{question.title}}</a></td></tr>
+{% endfor %}
+</table>
+</pre>
 {% endblock %}
 

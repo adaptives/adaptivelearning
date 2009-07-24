@@ -24,7 +24,7 @@ function update_questions(data) {
 		else {
 			if(!(item.pk in questions)) {
 				questions[item.pk] = item.fields.text;
-				$("div#questions").append("<p id='" + item.pk + "'><a href='javascript:question_clicked(" + item.pk + ")'>" + item.fields.title + "</a></p>");
+				$("div#questions").append("<p id='" + item.pk + "'><a href='javascript:question_clicked(" + item.pk + ")'>" + item.fields.title + "</a> <i>asked by - <a href='/profile/public/" + item.fields.user + "/'>" + item.fields.user + "</i> </a></p>");
 			}
 		}
 	});
@@ -37,6 +37,7 @@ $.getJSON("/courses/course/topic/questions/?url=" + window.location.pathname, fu
 $("div#questions").poll({
     url: "/courses/course/topic/questions/?url=" + window.location.pathname,
     success: function(data){
+			/*
 			$.each(data, function(i, item) {
 				if(item.error) {
 					alert('This was an error while processing this page');
@@ -48,6 +49,8 @@ $("div#questions").poll({
 					}
 				}
 			});
+			*/
+			update_questions(data);
     }
 });
 

@@ -14,7 +14,7 @@ from apps.courses.models import Answer
 
 def course_list(request):
 	print "user: ", request.user.username
-	courses = get_sorted_courses()
+	courses = get_sortedcourses()
 	return render_to_response('index.html', {'courses':courses}, context_instance=RequestContext(request))
 
 
@@ -332,10 +332,11 @@ def submit_answer(request, question_id):
 
 @user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
 def user_profile(request):
-	print "EN user_profile"
 	errors = []
 	if request.method == 'GET':
-		return render_to_response('user_profile.html', context_instance=RequestContext(request))
+		users_questions = Question.objects.filter(user__username=request.user.username)
+		users_answers = Answer.objects.filter(user__username=request.user.username)
+		return render_to_response('user_profile.html', {'questions':users_questions, 'answers':users_answers}, context_instance=RequestContext(request))
 	elif request.method == 'POST':
 		user = User.objects.get(username=request.POST['username'])
 		user_profile = user.get_profile()
@@ -355,6 +356,22 @@ def user_profile(request):
 		user_profile.save()
 		return render_to_response('user_profile.html', {'errors': errors}, context_instance=RequestContext(request))
 
+
+@user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
+def user_profile_public(request, username):
+	if request.method == 'GET':
+		users_questions = Question.objects.filter(user__username=username)
+		users_answers = Answer.objects.filter(user__username=username)
+		profiled_user = User.objects.get(username=username)
+		return render_to_response('user_profile_public.html', {'profiled_user':profiled_user, 'questions':users_questions, 'answers':users_answers}, context_instance=RequestContext(request))
+			
+
+@user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
+def list_users(request):
+	if request.method == 'GET':
+		users = User.objects.all()
+		return render_to_response('users.html', {'users':users}, context_instance=RequestContext(request))
+			
 def get_sorted_courses():
 	course_orders = CourseOrder.objects.all()
 	course_order_list = list(course_orders)

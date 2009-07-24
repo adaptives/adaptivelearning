@@ -1,0 +1,22 @@
+{% extends "alsuper.html" %}
+{% block header%}
+{% endblock %}
+{% block content %}
+<pre>
+<b>{{profiled_user.username}} Member since {{profiled_user.date_joined}} located in timezone {{profiled_user.get_profile.timezone}}</b>
+<br><b>Answered {{answers.count}} questions</b>
+<table>
+{%for answer in answers%}
+<tr><td><a href='{{answer.question.forum}}'>{{answer.question.title}}</a></td></tr>
+{%endfor%}
+</table>
+
+<br><b>Asked {{questions.count}} question{{questions.count|pluralize}}</b>
+<table>
+{% for question in questions %}
+<tr><td><a href='{{question.forum}}'>{{question.title}}</a></td></tr>
+{% endfor %}
+</table>
+</pre>
+{% endblock %}
+

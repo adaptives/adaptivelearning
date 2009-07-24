@@ -1,0 +1,12 @@
+{% extends "alsuper.html" %}
+{% block header %}
+{% endblock %}
+{% block content %}
+<table>
+{% for user in users %}
+	<tr>
+	<td><a href='/profile/public/{{user.username}}/'>{{user.username}}</a></td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}
