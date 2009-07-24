@@ -48,7 +48,7 @@ class Question(models.Model):
 class Answer(models.Model):
 	text = models.TextField(blank=False)
 	question = models.ForeignKey(Question, related_name='answers', blank=False)
-	user = models.ForeignKey(User, blank=False)
+	user = models.ForeignKey(User, blank=False, to_field='username')
 
 	def __unicode__(self):
 		return u"question [%s] answer [%s] user [%s]" % (smart_truncate(question), smart_truncate(text), self.user)
