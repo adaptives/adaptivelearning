@@ -335,22 +335,31 @@ def user_profile(request):
 		users_answers = Answer.objects.filter(user__username=request.user.username)
 		return render_to_response('user_profile.html', {'questions':users_questions, 'answers':users_answers}, context_instance=RequestContext(request))
 	elif request.method == 'POST':
-		user = User.objects.get(username=request.POST['username'])
-		user_profile = user.get_profile()
-		if request.POST['password1'] or request.POST['password2']:
-			if request.POST['password1'] == request.POST['password2']:
-				user.set_password(request.POST['password1'])
-				try:
-					user.save()
-				except Exception, e:
-					errors.append("Could not change password " + e)
-			else:
-				errors.append('password does not match retyped password')
-		if request.POST['website']:
-			user_profile.website = request.POST['website']
-		if request.POST['timezone']:
-			user_profile.timezone = request.POST['timezone']
-		user_profile.save()
+		try:
+			user = User.objects.get(username=request.POST['username'])
+			user_profile = user.get_profile()
+			if request.POST['password1'] or request.POST['password2']:
+				if request.POST['password1'] == request.POST['password2']:
+					user.set_password(request.POST['password1'])
+					try:
+						user.save()
+					except Exception, e:
+						errors.append("Could not change password " + e)
+				else:
+					errors.append('password does not match retyped password')
+			if request.POST['full_name']:
+				user_profile.full_name = request.POST['full_name']
+			if request.POST['website']:
+				user_profile.website = request.POST['website']
+			if request.POST['timezone']:
+				user_profile.timezone = request.POST['timezone']
+				print "user_profile.timezone '" + user_profile.timezone + "'"
+			if request.POST['bio']:
+				user_profile.bio = request.POST['bio']
+			user_profile.save()
+		except Exception, e:
+			print "Exception occured while saving user_profile ", e
+			errors.append(str(e))
 		return render_to_response('user_profile.html', {'errors': errors}, context_instance=RequestContext(request))
 
 

@@ -6,10 +6,29 @@
   <h1>Create an account</h1>
 
   <form action="" method="post">
-      {{ form.as_p }}
-			<label for='id_website'> Website: </label> <input type='text' name='website' id='id_website'/><br>
-			<label for='id_timezone'> Timezone: <input type='text' name='timezone' id='is_timezone'/><br>
-      <input type="submit" value="Create the account">
+		<table>
+    {{ form.as_table }}		
+		<tr>
+			<td><label for='id_full_name'> Full Name: </label></td>
+			<td><input type='text' name='full_name' id='id_full_name'/></td>
+		</tr>
+		<tr>
+			<td><label for='id_website'> Website: </label></td>
+			<td><input type='text' name='website' id='id_website'/></td>
+		</tr>
+		<tr>
+			<td><label for='id_timezone'> Timezone: </label></td>
+			<td><input type='text' name='timezone' id='is_timezone'/></td>
+		</tr>
+		<tr>
+      <td><label for="id_bio">About Yourself: </label></td>
+			<td><textarea name="bio" cols="65" rows="10"></textarea></td>
+		</tr>
+		<tr>
+      <td><input type="submit" value="Create the account" /></td>
+			<td><input type="reset" value="Reset" /></td>
+		</tr>
+		</table>
   </form>
 {% endblock %}
 

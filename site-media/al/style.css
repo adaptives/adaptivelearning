@@ -21,6 +21,10 @@ body, h2 {
 	text-decoration:none;
 }
 
+label {
+	font-weight:bold;
+}
+
 .menu {
 	font-weight:bold;
 }

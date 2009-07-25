@@ -56,11 +56,13 @@ class Answer(models.Model):
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True, related_name='profile', blank=False)
+	full_name = models.CharField(max_length=255)
 	website = models.CharField(max_length=255)
 	timezone = models.CharField(max_length="20")
+	bio = models.TextField()
 	
 	def __unicode__(self):
-		return u"%s" % (self.website)
+		return u"Name [%s]" % (self.full_name)
 
 
 def smart_truncate(content, length=100, suffix='...'):

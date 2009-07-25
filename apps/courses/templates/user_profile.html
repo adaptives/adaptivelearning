@@ -6,13 +6,20 @@ Profile:
 <form action="" method="POST">
 	<table>
 	<tr>
-		<td><label for=''>username</label></td><td><input type='text' name='username' value='{{user.username}}' id='id_username' readonly/></td>
+		<td><label for=''>username</label></td>
+		<td><input type='text' name='username' value='{{user.username}}' id='id_username' readonly/></td>
 	</tr>
 	<tr>
-		<td><label for=''>password</label></td><td><input type='password' name='password1' id='id_password1' /></td>
+		<td><label for=''>Full Name</label></td>
+		<td><input type='text' name='full_name' value='{{user.get_profile.full_name}}' id='id_full_name' /> </td>
 	</tr>
 	<tr>
-		<td><label for=''>retype password</label></td><td><input type='password' name='password2' id='id_password2' /></td>
+		<td><label for=''>password</label></td>
+		<td><input type='password' name='password1' id='id_password1' /></td>
+	</tr>
+	<tr>
+		<td><label for=''>retype password</label></td>
+		<td><input type='password' name='password2' id='id_password2' /></td>
 	</tr>
 	<tr>
 		<td><label for=''>Website </label></td>
@@ -23,12 +30,16 @@ Profile:
 		<td><input type='text' name='timezone' value='{{user.get_profile.timezone}}' id='id_timezone'/></td>
 	</tr>
 	<tr>
+		<td><label for=''>About Yourself </label></td>
+		<td><textarea name='bio' id='id_bio' cols='65' rows='10' />{{user.get_profile.bio}}</textarea></td>
+	</tr>
+	<tr>
 		<td><input type='submit' value='submit' id='id_submit' /></td>
 	</tr>
 	</table>
 </form>
 <pre>
-<b>Member since {{user.date_joined}}</b>
+<b>Member since {{user.date_joined|date:"F Y"}}</b>
 <br><b>Answered {{answers.count}} questions</b>
 <table>
 {%for answer in answers%}

@@ -3,20 +3,42 @@
 {% endblock %}
 {% block content %}
 <pre>
-<b>{{profiled_user.username}} - Member since {{profiled_user.date_joined|date:"F Y"}} 
-{% if profiled_user.get_profile.timezone %}located in timezone {{profiled_user.get_profile.timezone}} {% endif %}</b>
-<br><b>Answered {{answers.count}} questions</b>
 <table>
-{%for answer in answers%}
-<tr><td><a href='{{answer.question.forum}}'>{{answer.question.title}}</a></td></tr>
-{%endfor%}
-</table>
-
-<br><b>Asked {{questions.count}} question{{questions.count|pluralize}}</b>
-<table>
-{% for question in questions %}
-<tr><td><a href='{{question.forum}}'>{{question.title}}</a></td></tr>
-{% endfor %}
+	<tr>
+		<td>{{profiled_user.username}}</td>
+	</tr>
+	<tr>
+		<td><b>{{profiled_user.get_profile.full_name}} - Member since {{profiled_user.date_joined|date:"F Y"}}</b></td>
+	</tr>
+	{% if profiled_user.get_profile.timezone %}
+	<tr>
+		<td><b>located in timezone {{profiled_user.get_profile.timezone}}</b></td>
+	</tr>
+	{% endif %}
+	<tr>
+		<td><b>Answered {{answers.count}} questions</b></td>
+	</tr>
+	<tr>
+		<td>
+			<table>
+				{%for answer in answers%}
+					<tr><td><a href='{{answer.question.forum}}'>{{answer.question.title}}</a></td></tr>
+				{%endfor%}
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td><b>Asked {{questions.count}} question{{questions.count|pluralize}}</b></td>
+	</tr>
+	<tr>
+		<td>
+			<table>
+				{% for question in questions %}
+				<tr><td><a href='{{question.forum}}'>{{question.title}}</a></td></tr>
+				{% endfor %}
+			</table>
+		</td>
+	</tr>
 </table>
 </pre>
 {% endblock %}
