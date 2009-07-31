@@ -56,10 +56,11 @@ class Answer(models.Model):
 
 class UserProfile(models.Model):
 	user = models.ForeignKey(User, unique=True, related_name='profile', blank=False)
-	full_name = models.CharField(max_length=255)
-	website = models.CharField(max_length=255)
-	timezone = models.CharField(max_length="20")
-	bio = models.TextField()
+	full_name = models.CharField(max_length=255, blank=False)
+	email = models.EmailField(blank=False)
+	website = models.CharField(max_length=255, blank=True)
+	timezone = models.CharField(max_length="20", blank=True)
+	bio = models.TextField(blank=True)
 	
 	def __unicode__(self):
 		return u"Name [%s]" % (self.full_name)

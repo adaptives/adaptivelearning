@@ -7,10 +7,16 @@
 
   <form action="" method="post">
 		<table>
-    {{ form.as_table }}		
+    {{ user_form.as_table }}		
+    {{ user_profile_form.as_table }}		
+		<!--
 		<tr>
 			<td><label for='id_full_name'> Full Name: </label></td>
 			<td><input type='text' name='full_name' id='id_full_name'/></td>
+		</tr>
+		<tr>
+			<td><label for='id_email'> Email: </label></td>
+			<td><input type='text' name='email' id='id_email'/></td>
 		</tr>
 		<tr>
 			<td><label for='id_website'> Website: </label></td>
@@ -24,6 +30,7 @@
       <td><label for="id_bio">About Yourself: </label></td>
 			<td><textarea name="bio" cols="65" rows="10"></textarea></td>
 		</tr>
+		-->
 		<tr>
       <td><input type="submit" value="Create the account" /></td>
 			<td><input type="reset" value="Reset" /></td>
