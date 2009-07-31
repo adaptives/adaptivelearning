@@ -1,34 +1,51 @@
+import traceback
+import sys
 from django import forms
+from django.forms import ModelForm
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.shortcuts import render_to_response
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib import auth 
+from django.contrib import auth
+from adaptivelearning.apps.courses.models import UserProfile
 
+class UserProfileForm(ModelForm):
+	class Meta:
+		model = UserProfile
+		fields = ('full_name', 'email', 'website', 'timezone', 'bio')
+		
 def register(request):
 	if request.method == 'POST':
-		form = UserCreationForm(request.POST)
-		if form.is_valid():
-			user = form.save()
-			#user = auth.authenticate(username=request.POST.username, password=request.POST.password1)
-			#auth.login(request, user)
-			#user = User.objects.get(username=request.POST['username'])
-			user_profile = user.get_profile()
-			if request.POST['full_name']:
+		try:
+			user_form = UserCreationForm(request.POST)
+			user_profile_form = UserProfileForm(request.POST)
+			if user_form.is_valid() and user_profile_form.is_valid():
+				user = user_form.save()
+				user_profile = UserProfile()
 				user_profile.full_name = request.POST['full_name']
-			if request.POST['website']:
+				user_profile.email = request.POST['email']
 				user_profile.website = request.POST['website']
-			if request.POST['timezone']:
-				user_profile.timezone = request.POST['timezone']
-			if request.POST['bio']:
-				user_profile.bio = request.POST['bio']
-			user_profile.save()
-			return HttpResponseRedirect("/")
+				user_profile.email = request.POST['timezone']
+				user_profile.email = request.POST['bio']
+				user_profile.user = user
+				user_profile.save()
+				#user_profile_tmp = user.get_profile()
+				#user_profile = user_profile_form.save(commit=False)
+				#user_profile.user = user_profile_tmp.user
+				#user_profile.save()
+				return HttpResponseRedirect("/")
+			else:
+				return render_to_response("registration/register.html", {'user_form': user_form, 'user_profile_form':user_profile_form})
+		except Exception, e:
+			print "could not save UserProfile: ", e
+			#traceback.print_exception(limit=4)
+			return render_to_response("registration/register.html")
 	else:
-		form = UserCreationForm()
-	return render_to_response("registration/register.html", {'form': form,})
+		user_form = UserCreationForm()
+		user_profile_form = UserProfileForm()
+		return render_to_response("registration/register.html", {'user_form': user_form, 'user_profile_form':user_profile_form})
 
 
 def about(request):
