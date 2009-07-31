@@ -8,7 +8,7 @@
 			<td class="course_title"><a href="/courses/course/show/{{course.short_name}}/">{{course.short_name}}</a> {{course.name}}</td>
 		</tr>
 		<tr>
-			<td>{{course.description}}</td>
+			<td>{{course.description|safe}}</td>
 		</tr>
 	</table>
 	</p>
