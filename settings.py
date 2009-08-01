@@ -64,7 +64,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 		'django.middleware.transaction.TransactionMiddleware',
+		'djangologging.middleware.LoggingMiddleware',
 )
+
+INTERNAL_IPS = ('127.0.0.1', '192.168.5.2')
 
 TEMPLATE_CONTEXT_PROCESSORS = (
 		'django.core.context_processors.request',

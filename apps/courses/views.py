@@ -1,3 +1,4 @@
+import logging
 from django.http import HttpResponse
 from django.core import serializers
 from django.template import RequestContext
@@ -13,7 +14,7 @@ from apps.courses.models import Question
 from apps.courses.models import Answer
 
 def course_list(request):
-	print "user: ", request.user.username
+	logging.info('landing page invoked')
 	courses = get_sorted_courses()
 	return render_to_response('index.html', {'courses':courses}, context_instance=RequestContext(request))
 
@@ -36,15 +37,12 @@ def course_add(request):
 		errors = []
 		#add/edit the course to the db
 		short_name = request.POST['short_name']
-		print 'short_name of course to be added -' + short_name + "-"
 		name = request.POST['name']
 		description = request.POST.get('description', '')
-		print "Thanks for creating a course %s - %s - %s" % (short_name, name, description)
 		c = Course(short_name=short_name, name=name, description=description)
 		c.save()
 		try:
 			course_order = CourseOrder.objects.get(course=c)
-			print 'WARN: A course_order already exists for a course which was freshly created'
 		except CourseOrder.DoesNotExist:
 			course_order = CourseOrder(course=c)
 			course_orders = CourseOrder.objects.order_by('-order')[:1]
@@ -61,7 +59,7 @@ def course_add(request):
 	
 	#We cannot process any request besides GET and POST
 	else:
-		print "%s requested" % (request.method)
+		logging.error("%s requested" % (request.method))
 		#error msg???
 
 
@@ -75,7 +73,7 @@ def course_edit(request, course_short_name):
 			try:
 				c = Course.objects.get(short_name=request.POST['short_name'])
 			except Course.DoesNotExist:
-				print "course does not exist '%s'" % (request.POST['short_name'])
+				logging.error("course does not exist '%s'" % (request.POST['short_name']))
 		if 'name' in request.POST and request.POST['name']:
 			c.name = request.POST['name']
 		c.description = request.POST.get('description', '')
@@ -99,7 +97,7 @@ def course_edit(request, course_short_name):
 	
 	#We cannot process any request besides GET and POST
 	else:
-		print "%s requested" % (request.method)
+		logging.error("%s requested" % (request.method))
 		#error msg???
 
 
@@ -136,20 +134,17 @@ def courses_reorder(request):
 		count += 1
 		if(course_short_name == ''):
 			continue
-		print "setting order for course %s to %d" % (course_short_name, count)
 		try:
 			course = Course.objects.get(short_name=course_short_name)
 			try:
 				co = CourseOrder.objects.get(course=course)
-				print "Obtained existing course"
 			except:
 				co = CourseOrder(course=course, order=count)
-				print "Created new course"
 			co.order = count
 			co.save()
 			msg = 'Course reordering complete'
 		except Exception, e:
-			print "Could not reorder courses ", e
+			logging.error("Could not reorder courses " + e)
 			msg = 'Course reordering faile ', e
 	return HttpResponse(msg)
 
@@ -160,7 +155,6 @@ def topic_show(request, course_short_name, topic_id):
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_reorder(request, course_short_name):
-	print "processing topic reordering request: " + request.POST['order']
 	msg = ''
 	topic_ids = request.POST['order'].split(',')
 	count = 0
@@ -168,23 +162,20 @@ def topic_reorder(request, course_short_name):
 		count += 1
 		if topic_id == '':
 			continue
-		print "setting order for course %s topic %s order %d" % (course_short_name, topic_id, count)
 		try:
 			course = Course.objects.get(short_name = course_short_name)
 			topic = Topic.objects.get(id = int(topic_id))
 			to = None
 			try:
 				to = TopicOrder.objects.get(course=course, topic=topic)
-				print "Obtained existing topic"
 			except:
 				to = TopicOrder(course=course, topic=topic, order=count)
-				print "Created new topic"
 			to.order = count
 			#(to, created) = TopicOrder.objects.get_or_create(course=course, topic=topic)
 			to.save()
 			msg = 'Topic ordering successfull'
 		except Exception, x:
-			print "could not save TopicOrder object ", x
+			logging.error("could not save TopicOrder object " + x)
 			msg = 'Topic ordering failed because ' + x
 	return HttpResponse(msg);
 	
@@ -210,7 +201,6 @@ def topic_add(request, course_short_name):
 			topic_order.order = 0
 		topic_order.save()
 		forum_url = "/courses/course/topic/show/"+c.short_name+"/"+str(t.pk)
-		print 'creating forum with url *' + forum_url + '*'
 		forum = Forum(url=forum_url)
 		forum.save()
 		return render_to_response('topic/add.html', {'course_short_name':course_short_name, 'errors':['topic saved']}, context_instance=RequestContext(request))
@@ -238,7 +228,6 @@ def topic_edit_save(request):
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_delete(request, course_short_name):
-	print "course_short_name: ", course_short_name
 	msgs = []
 	errors = []
 	for course_topic, on_of in request.POST.items():
@@ -258,12 +247,10 @@ def get_forum_questions(request):
 		try:
 			forum = Forum.objects.select_related().get(url=forum_url)
 			questions = forum.questions.all()
-			for question in questions:
-				print question.user.username
 			res = serializers.serialize("json", questions)
 			return HttpResponse(res, mimetype="application/javascript")
 		except Exception, e:
-			print "Error: Could not process request: ", e
+			logging.error("Error: Could not process request: " + e)
 			res = "[{'error':'Could not process request'}]"
 	else:
 		res = "[{'error':'Could not process request'}]"
@@ -273,7 +260,6 @@ def get_forum_questions(request):
 def submit_question(request):
 	res = ''
 	if request.method == 'POST':
-		print "Received question"
 		try:
 			url = request.POST['url']
 			title = request.POST['title']
@@ -288,7 +274,7 @@ def submit_question(request):
 			return HttpResponse(res)
 		except Exception, e:
 			msg = "Could not save question because: " +  e
-			print msg
+			logging.error(msg)
 			res = "[{'error':" + msg + "}]"
 			return HttpResponse(res)
 	else:
@@ -298,21 +284,18 @@ def submit_question(request):
 
 
 def get_answers_for_question(request, question_id):
-	print "Getting answers for = " + question_id
 	try:
 		question = Question.objects.get(pk=int(question_id))
 		answers = question.answers.all()
 		res = serializers.serialize("json", answers)
-		print "Answers are: " + res
 		return HttpResponse(res, mimetype="application/javascript")
 	except Exception, e:
-		print "Could not process request because: ", e
+		logging.error("Could not process request because: " + e)
 		return HttpResponse("[{'error':'Could not process request'}]")
 
 
 @user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
 def submit_answer(request, question_id):
-	print "Received the answer for question " + question_id
 	try:
 		answer_text = request.POST['answer']
 		if not answer_text:
@@ -324,7 +307,7 @@ def submit_answer(request, question_id):
 		answer.save()
 		return HttpResponse('Thanks')
 	except Exception, e:
-		print 'answer could not be saved: ', e
+		logging.error('answer could not be saved: ' + e)
 		return HttpResponse('Sorry but your answer could not be processed')
 
 @user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
@@ -353,12 +336,11 @@ def user_profile(request):
 				user_profile.website = request.POST['website']
 			if request.POST['timezone']:
 				user_profile.timezone = request.POST['timezone']
-				print "user_profile.timezone '" + user_profile.timezone + "'"
 			if request.POST['bio']:
 				user_profile.bio = request.POST['bio']
 			user_profile.save()
 		except Exception, e:
-			print "Exception occured while saving user_profile ", e
+			logging.error("Exception occured while saving user_profile " + e)
 			errors.append(str(e))
 		return render_to_response('user_profile.html', {'errors': errors}, context_instance=RequestContext(request))
 

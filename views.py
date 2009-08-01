@@ -39,8 +39,7 @@ def register(request):
 			else:
 				return render_to_response("registration/register.html", {'user_form': user_form, 'user_profile_form':user_profile_form})
 		except Exception, e:
-			print "could not save UserProfile: ", e
-			#traceback.print_exception(limit=4)
+			logging.error("could not save UserProfile: " + e)
 			return render_to_response("registration/register.html")
 	else:
 		user_form = UserCreationForm()
