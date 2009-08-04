@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -37,6 +38,7 @@ class Forum(models.Model):
 		return u"%s" % (self.url)
 
 class Question(models.Model):
+	time_asked = models.DateTimeField(blank=False, default=datetime.datetime.now)
 	title = models.CharField(max_length=255, blank=False)
 	text = models.TextField()
 	forum = models.ForeignKey(Forum, related_name='questions', blank=False)
@@ -46,6 +48,7 @@ class Question(models.Model):
 		return u"forum [%s] question [%s] user [%s]" % (self.forum, smart_truncate(self.text), self.user)
 
 class Answer(models.Model):
+	time_answered = models.DateTimeField(blank=False, default=datetime.datetime.now)
 	text = models.TextField(blank=False)
 	question = models.ForeignKey(Question, related_name='answers', blank=False)
 	user = models.ForeignKey(User, blank=False, to_field='username')
