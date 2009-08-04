@@ -49,3 +49,11 @@ def register(request):
 
 def about(request):
 	return render_to_response("about.html", context_instance=RequestContext(request))
+
+
+def terms_of_service(request):
+	return render_to_response("terms_of_service.html", context_instance=RequestContext(request))
+
+
+def privacy_policy(request):
+	return render_to_response("privacy_policy.html", context_instance=RequestContext(request))

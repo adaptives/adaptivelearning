@@ -88,7 +88,7 @@ h1, h1 a:hover, h1 a:visited, h1 a:link, h1 a:active {
 	text-transform:uppercase;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2 {
 	font-weight:normal;
 	color:#EB9420;
 }
@@ -110,3 +110,22 @@ h1, h2, h3, h4, h5, h6 {
 	color:#4EAE75;
 }
 
+
+.footer {
+	text-align:center;
+}
+
+.footer A {
+	color:#AAAAAA;
+	font-size:9px;
+}
+
+.wordpress_attribution {
+	font-style:italic;
+	color:#777777;
+	border-top: dotted 1px;
+}
+
+.wordpress_attribution A {
+	color:#777777;
+}
