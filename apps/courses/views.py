@@ -1,6 +1,7 @@
 import logging
 from django.http import HttpResponse
 from django.core import serializers
+from django.core.serializers.json import DjangoJSONEncoder
 from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
@@ -247,9 +248,10 @@ def get_forum_questions(request):
 		try:
 			forum = Forum.objects.select_related().get(url=forum_url)
 			questions = forum.questions.all()
-			res = serializers.serialize("json", questions)
+			res = get_date_formatted_json(questions)
 			return HttpResponse(res, mimetype="application/javascript")
 		except Exception, e:
+			print "Could not get questions ", e
 			logging.error("Error: Could not process request: " + e)
 			res = "[{'error':'Could not process request'}]"
 	else:
@@ -287,7 +289,7 @@ def get_answers_for_question(request, question_id):
 	try:
 		question = Question.objects.get(pk=int(question_id))
 		answers = question.answers.all()
-		res = serializers.serialize("json", answers)
+		res = get_date_formatted_json(answers)
 		return HttpResponse(res, mimetype="application/javascript")
 	except Exception, e:
 		logging.error("Could not process request because: " + e)
@@ -373,4 +375,14 @@ def get_sorted_topics(course):
 	topic_order_list.sort(lambda x, y:  cmp(x.order,y.order))
 	sorted_topics = [topic_order.topic for topic_order in topic_order_list]
 	return sorted_topics
+
+def get_date_formatted_json(query_set):
+	current_date_format = DjangoJSONEncoder.DATE_FORMAT
+	current_time_format = DjangoJSONEncoder.TIME_FORMAT
+	DjangoJSONEncoder.DATE_FORMAT = "%d %b %y,"			
+	DjangoJSONEncoder.TIME_FORMAT = "%H:%M"			
+	res = serializers.serialize("json", query_set)
+	DjangoJSONEncoder.DATE_FORMAT = current_date_format			
+	DjangoJSONEncoder.TIME_FORMAT = current_time_format
+	return res
 
