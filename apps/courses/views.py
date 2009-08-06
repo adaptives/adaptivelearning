@@ -301,7 +301,7 @@ def submit_answer(request, question_id):
 	try:
 		answer_text = request.POST['answer']
 		if not answer_text:
-			answer_text = ''
+			return HttpResponse('Cannot save empty answer')
 		question = Question.objects.get(pk=int(question_id))
 		answer = Answer(text=answer_text)
 		answer.question = question
