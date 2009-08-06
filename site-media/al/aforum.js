@@ -23,7 +23,7 @@ function update_questions(data) {
 		}
 		else {
 			if(!(item.pk in questions)) {
-				questions[item.pk] = item.fields.text;
+				questions[item.pk] = item.fields.text.replace(/\n/g, '<br>');
 				$("div#questions").append("<p id='" + item.pk + "'><a href='javascript:question_clicked(" + item.pk + ")'>" + item.fields.title + "</a> <i>asked on " + item.fields.time_asked + " by - <a href='/profile/public/" + item.fields.user + "/'>" + item.fields.user + "</i> </a></p>");
 			}
 		}
