@@ -1,0 +1,26 @@
+1. Changelog as on tag [pre-beta]
+	 1. changed site styles to use Orange and Green along with some fonts
+	 2. Added login form for users
+	 3. Changed width of main window to 700px
+	 4. Added admin capabilities
+	 5. Massive refactoring to structure the code better
+	 6. Changed formatting of profile page
+	 7. Added support for registration
+	 8. Added support to reorder courses and topics from the management pages
+	 9. Added an embedded forum per page
+	 10.Added user profile
+	 11.Added 404 and 505 pages
+	 12.Added public profile where a logged in user can see all users
+	 13.Added about page
+
+2. Changelog as on 2009 August 07 [20090807001-pre-beta]
+   1. Added email field to user profile
+   2. Allowing html content in course description
+   3. Allowing the html content for courses description in the front listing page
+   4. Started smart truncating course description on the course listing page
+   5. Added terms of service and privacy policy
+   6. Displaying time information on questions and answers
+   7. Blank answers will not be saved in the db
+   8. Displaying newlines in all rendered questionsa and answers
+	 9. Added user voice for feedback
+
