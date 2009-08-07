@@ -25,7 +25,7 @@ function populate_answers(q_id) {
 											"<p style='font-weight:bold;'> " + data.length + " Answers </p>" +	
 										  "</div>");
 		$.each(data, function(i, item) {
-			$(selector + " div#qa").append("<p style='padding:20px; border-top: 1px solid #D3D3D3;'>" + item.fields.text.replace(/\n/g, "<br>") + "<br> <i>answered on " + item.fields.time_answered + " by - <a href='/profile/public/" + item.fields.user + "/'>" + item.fields.user + "</a></i></p>");
+			$(selector + " div#qa").append("<p style='padding:20px; border-top: 1px solid #D3D3D3;'>" + item.fields.text.replace(/\n/g, "<br>") + "<br> <i>answered about " + item.fields.time_answered + " ago by - <a href='/profile/public/" + item.fields.user + "/'>" + item.fields.user + "</a></i></p>");
 		});
 		$(selector + " div#qa").append("<table id='question_form'>" + 
 																	 "<tr><td><textarea rows='10' cols='80' id='answer' name='answer'></textarea></td></tr>" + 

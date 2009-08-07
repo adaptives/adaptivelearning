@@ -1,7 +1,10 @@
 import logging
+import datetime
+from django.utils import simplejson
 from django.http import HttpResponse
 from django.core import serializers
 from django.core.serializers.json import DjangoJSONEncoder
+from django.core.serializers.json import Serializer as JSONSerializer 
 from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
@@ -13,6 +16,44 @@ from apps.courses.models import CourseOrder
 from apps.courses.models import Forum
 from apps.courses.models import Question
 from apps.courses.models import Answer
+
+class DateModifyingEncoder(DjangoJSONEncoder):
+	SECONDS_IN_DAY = 60 * 60 * 24
+	SECONDS_IN_HR = 60 * 60
+	SECONDS_IN_MIN = 60
+	def default(self, object):
+		#format =  "%d %b %Y, %H:%M"
+		if isinstance(object, datetime.datetime):
+			delta = datetime.datetime.now() - object
+			return self.get_delta_as_string(delta)
+		else:
+			return super(DateModifyingEncoder, self).default(object)
+
+	def get_delta_as_string(self, delta):
+		days = delta.days
+		seconds = delta.seconds
+		hours = 0
+		minutes = 0
+		hours = seconds / self.SECONDS_IN_HR
+		seconds = seconds % self.SECONDS_IN_HR
+		minutes = seconds / self.SECONDS_IN_MIN 
+		seconds = seconds % self.SECONDS_IN_MIN
+		delta_str = ''
+		if days > 0:
+			delta_str += str(days) + ' days, '
+		if hours > 0:
+			delta_str += str(hours) + ' hours, '
+		if days <= 0 and seconds > 0:
+			delta_str += str(seconds) + ' secs, '
+		return delta_str
+
+
+class DateModifyingJSONSerializer(JSONSerializer):
+	def end_serialization(self):
+		self.options.pop('stream', None)
+		self.options.pop('fields', None)	
+		simplejson.dump(self.objects, self.stream, cls=DateModifyingEncoder, **self.options)
+
 
 def course_list(request):
 	logging.info('landing page invoked')
@@ -377,12 +418,14 @@ def get_sorted_topics(course):
 	return sorted_topics
 
 def get_date_formatted_json(query_set):
-	current_date_format = DjangoJSONEncoder.DATE_FORMAT
-	current_time_format = DjangoJSONEncoder.TIME_FORMAT
-	DjangoJSONEncoder.DATE_FORMAT = "%d %b %y,"			
-	DjangoJSONEncoder.TIME_FORMAT = "%H:%M"			
-	res = serializers.serialize("json", query_set)
-	DjangoJSONEncoder.DATE_FORMAT = current_date_format			
-	DjangoJSONEncoder.TIME_FORMAT = current_time_format
+	#current_date_format = DjangoJSONEncoder.DATE_FORMAT
+	#current_time_format = DjangoJSONEncoder.TIME_FORMAT
+	#DjangoJSONEncoder.DATE_FORMAT = "%d %b %Y,"			
+	#DjangoJSONEncoder.TIME_FORMAT = "%H:%M"
+	json_serializer = DateModifyingJSONSerializer() # serializers.get_serializer("json")()
+	res = json_serializer.serialize(query_set)
+	#res = serializers.serialize("json", query_set, cls=DateModifyingEncoder)
+	#DjangoJSONEncoder.DATE_FORMAT = current_date_format			
+	#DjangoJSONEncoder.TIME_FORMAT = current_time_format
 	return res
 
