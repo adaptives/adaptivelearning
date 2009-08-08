@@ -24,7 +24,7 @@ class DateModifyingEncoder(DjangoJSONEncoder):
 	def default(self, object):
 		#format =  "%d %b %Y, %H:%M"
 		if isinstance(object, datetime.datetime):
-			delta = datetime.datetime.now() - object
+			delta = datetime.datetime.utcnow() - object
 			return self.get_delta_as_string(delta)
 		else:
 			return super(DateModifyingEncoder, self).default(object)
