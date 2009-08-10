@@ -400,7 +400,8 @@ def user_profile_public(request, username):
 @user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
 def list_users(request):
 	if request.method == 'GET':
-		users = User.objects.all()
+		#List all users except the root user
+		users = User.objects.exclude(is_superuser = True)
 		return render_to_response('users.html', {'users':users}, context_instance=RequestContext(request))
 			
 def get_sorted_courses():
