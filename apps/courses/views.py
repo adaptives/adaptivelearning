@@ -9,13 +9,13 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
-from apps.courses.models import Course
-from apps.courses.models import Topic
-from apps.courses.models import TopicOrder
-from apps.courses.models import CourseOrder
-from apps.courses.models import Forum
-from apps.courses.models import Question
-from apps.courses.models import Answer
+from courses.models import Course
+from courses.models import Topic
+from courses.models import TopicOrder
+from courses.models import CourseOrder
+from courses.models import Forum
+from courses.models import Question
+from courses.models import Answer
 
 class DateModifyingEncoder(DjangoJSONEncoder):
 	SECONDS_IN_DAY = 60 * 60 * 24

@@ -2,7 +2,8 @@ from django.conf.urls.defaults import *
 from django.contrib.auth.views import login, logout
 import settings
 import adaptivelearning
-from adaptivelearning.apps.courses.views import manage
+import courses
+from courses.views import manage
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -23,13 +24,13 @@ urlpatterns = patterns('',
     (r'^accounts/login/$', login),
     (r'^accounts/logout/$', logout, {'next_page':'/'}),
 		(r'^site-media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-		(r'^$', 'adaptivelearning.apps.courses.views.course_list'),
+		(r'^$', 'courses.views.course_list'),
 		(r'^about/$', 'adaptivelearning.views.about'),
 		(r'^registration/', 'adaptivelearning.views.register'),		
 		(r'^terms-of-service/$', 'adaptivelearning.views.terms_of_service'),		
 		(r'^privacy-policy/$', 'adaptivelearning.views.privacy_policy'),		
-		(r'^profile/$', 'adaptivelearning.apps.courses.views.user_profile'),
-		(r'^profile/public/(.*)/$', 'adaptivelearning.apps.courses.views.user_profile_public'),
-		(r'^users/$', 'adaptivelearning.apps.courses.views.list_users'),
-		(r'^courses/', include('adaptivelearning.apps.courses.urls')),
+		(r'^profile/$', 'courses.views.user_profile'),
+		(r'^profile/public/(.*)/$', 'courses.views.user_profile_public'),
+		(r'^users/$', 'courses.views.list_users'),
+		(r'^courses/', include('courses.urls')),
 )

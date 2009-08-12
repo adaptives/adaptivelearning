@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.shortcuts import render_to_response
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import auth
-from adaptivelearning.apps.courses.models import UserProfile
+from courses.models import UserProfile
 
 class UserProfileForm(ModelForm):
 	class Meta:

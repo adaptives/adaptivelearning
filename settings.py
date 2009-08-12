@@ -94,7 +94,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-		'adaptivelearning.apps.courses',
+		'courses',
 )
 
 AUTH_PROFILE_MODULE = 'courses.userprofile'
