@@ -3,7 +3,6 @@ from django.contrib.auth.views import login, logout
 import settings
 import adaptivelearning
 import courses.views as courseviews
-import courses.aforum_views as forumviews
 
 urlpatterns = patterns('',
     # Example:
@@ -15,10 +14,6 @@ urlpatterns = patterns('',
 
 		(r'^course/show/(.*)/$', courseviews.course_show),
 		(r'^course/topic/show/(.*)/(.*)$',courseviews.topic_show),
-		(r'^course/topic/questions/submit/$',forumviews.submit_question),
-		(r'^course/topic/questions/$',forumviews.get_forum_questions),
-		(r'^course/question/submit_answer/(.*)/$',forumviews.submit_answer),
-		(r'^course/question/answers/(.*)/$', forumviews.get_answers_for_question),
 		(r'^manage/$', courseviews.manage),
 		(r'^manage/courses/$', courseviews.course_manager),
 		(r'^manage/courses/reorder/$', courseviews.courses_reorder),

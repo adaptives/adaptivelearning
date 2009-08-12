@@ -201,6 +201,7 @@ def topic_add(request, course_short_name):
 		else:
 			topic_order.order = 0
 		topic_order.save()
+		#TODO: Can we make this a REST call to the forum app ??? it will be a better dependency
 		forum_url = "/courses/course/topic/show/"+c.short_name+"/"+str(t.pk)
 		forum = Forum(url=forum_url)
 		forum.save()
@@ -246,6 +247,7 @@ def topic_delete(request, course_short_name):
 def user_profile(request):
 	errors = []
 	if request.method == 'GET':
+		#TODO: Can these be calls to the dtforum app instead of direct database access
 		users_questions = Question.objects.filter(user__username=request.user.username)
 		users_answers = Answer.objects.filter(user__username=request.user.username)
 		return render_to_response('user_profile.html', {'questions':users_questions, 'answers':users_answers}, context_instance=RequestContext(request))
@@ -280,6 +282,7 @@ def user_profile(request):
 @user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
 def user_profile_public(request, username):
 	if request.method == 'GET':
+		#TODO: Can we make these into calls to the dtforum app??? 
 		users_questions = Question.objects.filter(user__username=username)
 		users_answers = Answer.objects.filter(user__username=username)
 		profiled_user = User.objects.get(username=username)

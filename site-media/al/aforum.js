@@ -30,12 +30,12 @@ function update_questions(data) {
 	});
 }
 
-$.getJSON("/courses/course/topic/questions/?url=" + window.location.pathname, function(data) {
+$.getJSON("/dtforum/questions/?url=" + window.location.pathname, function(data) {
 	update_questions(data);
 });
 
 $("div#questions").poll({
-    url: "/courses/course/topic/questions/?url=" + window.location.pathname,
+    url: "/dtforum/questions/?url=" + window.location.pathname,
     success: function(data){
 			/*
 			$.each(data, function(i, item) {

@@ -8,9 +8,9 @@ from django.core.serializers.json import Serializer as JSONSerializer
 from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
-from courses.models import Forum
-from courses.models import Question
-from courses.models import Answer
+from dtforum.models import Forum
+from dtforum.models import Question
+from dtforum.models import Answer
 
 class DateModifyingEncoder(DjangoJSONEncoder):
 	SECONDS_IN_DAY = 60 * 60 * 24
@@ -124,14 +124,7 @@ def submit_answer(request, question_id):
 
 			
 def get_date_formatted_json(query_set):
-	#current_date_format = DjangoJSONEncoder.DATE_FORMAT
-	#current_time_format = DjangoJSONEncoder.TIME_FORMAT
-	#DjangoJSONEncoder.DATE_FORMAT = "%d %b %Y,"			
-	#DjangoJSONEncoder.TIME_FORMAT = "%H:%M"
 	json_serializer = DateModifyingJSONSerializer() # serializers.get_serializer("json")()
 	res = json_serializer.serialize(query_set)
-	#res = serializers.serialize("json", query_set, cls=DateModifyingEncoder)
-	#DjangoJSONEncoder.DATE_FORMAT = current_date_format			
-	#DjangoJSONEncoder.TIME_FORMAT = current_time_format
 	return res
 

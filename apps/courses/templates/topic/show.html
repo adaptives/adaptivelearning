@@ -11,7 +11,7 @@ $(document).ready(function() {
 var q_status = {};
 
 function answer_question(q_id) {
-	$.post('/courses/course/question/submit_answer/'+q_id+'/', {'answer':$('textarea#answer').val()}, function(data) {
+	$.post('/dtforum/question/submit_answer/'+q_id+'/', {'answer':$('textarea#answer').val()}, function(data) {
 		$("div#forum div#questions p#"+q_id+" div#qa").remove();
 		populate_answers(q_id);
 	});
@@ -19,7 +19,7 @@ function answer_question(q_id) {
 
 function populate_answers(q_id) {
 	var selector = "div#forum div#questions p#"+q_id;
-	$.getJSON('/courses/course/question/answers/'+q_id+'/', function(data) {
+	$.getJSON('/dtforum/question/answers/'+q_id+'/', function(data) {
 	$(selector).append("<div style='border: 1px dashed #D3D3D3; padding:20px;' id='qa'>" + 
 										  questions[q_id] + 
 											"<p style='font-weight:bold;'> " + data.length + " Answers </p>" +	
@@ -50,7 +50,7 @@ function question_clicked(q_id) {
 function ask_question() {
 	var title = $("div#forum table#question_form tr td input#title").val();
 	var question = $("div#forum table#question_form tr td textarea#question").val();
-  $.post("/courses/course/topic/questions/submit/", {'url':window.location.pathname, 'title': title, 'question': question},
+  $.post("/dtforum/topic/questions/submit/", {'url':window.location.pathname, 'title': title, 'question': question},
           function() {
 						$('table#question_form input#title').val('');
 						$('table#question_form textarea#question').val('');

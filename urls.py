@@ -3,6 +3,7 @@ from django.contrib.auth.views import login, logout
 import settings
 import adaptivelearning
 import courses
+import dtforum
 from courses.views import manage
 
 # Uncomment the next two lines to enable the admin:
@@ -33,4 +34,5 @@ urlpatterns = patterns('',
 		(r'^profile/public/(.*)/$', 'courses.views.user_profile_public'),
 		(r'^users/$', 'courses.views.list_users'),
 		(r'^courses/', include('courses.urls')),
+		(r'^dtforum/', include('dtforum.urls')),
 )
