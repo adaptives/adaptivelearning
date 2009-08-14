@@ -6,7 +6,7 @@ from django.db.models.signals import post_save
 class Course(models.Model):
 	short_name = models.CharField(max_length=10, primary_key=True)
 	name = models.CharField(max_length=100, blank=False)
-	description = models.CharField(max_length=2048, blank=False)
+	description = models.TextField(blank=False)
 
 	def __unicode__(self):
 		return u"[%s] %s" % (self.short_name, self.name)
