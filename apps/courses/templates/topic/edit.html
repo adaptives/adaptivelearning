@@ -8,7 +8,7 @@ Edit a course's topic
 	<input type="hidden" name="topic_id" value="{{topic.id}}" />
 	<input type="hidden" name="course_short_name" value="{{course_short_name}}" />
 	Title <input type="text" name="title" value="{% if topic %}{{topic.title}}{%endif%}"><br><br>
-	<textarea rows="10" cols="30" name="content">{% if topic %}{{topic.content}}{% endif %}</textarea><br><br>
+	<textarea rows="15" cols="70" name="content">{% if topic %}{{topic.content}}{% endif %}</textarea><br><br>
 	<input type="submit" value="Submit">
 </form>
 {% endblock %}

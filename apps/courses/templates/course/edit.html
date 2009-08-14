@@ -28,7 +28,7 @@ Edit the course
 <form action="/courses/manage/course/edit/" method="POST">
 	Short Name: <input type="text" name="short_name" value="{% if course %}{{course.short_name}}{%endif%}"><br><br>
 	Name: <input type="text" name="name" value="{% if course %}{{course.name}}{%endif %}"><br><br>
-	Description: <textarea rows="10" cols="30" name="description">{% if course %}{{course.description}}{% endif %}</textarea><br><br>
+	Description: <textarea rows="15" cols="70" name="description">{% if course %}{{course.description}}{% endif %}</textarea><br><br>
 	<input type="submit" value="Submit">
 </form>
 </p>

@@ -4,10 +4,10 @@ Add a topic
 {% endblock %}
 {% block content %}
 <p>
-<form action="/courses/manage/course/topic/add/" method="POST">
+<form action="/courses/manage/course/topic/add/{{course_short_name}}" method="POST">
 	Course: <input type="text" name="course_short_name" value="{{course_short_name}}" readonly /><br><br>
 	Title: <input type="text" name="title"><br><br>
-	Content: <textarea name="content"></textarea><br><br>
+	Content: <textarea name="content" rows="15" cols="70"></textarea><br><br>
 	<input type="submit" value="Submit">
 </form>
 {% endblock %}
