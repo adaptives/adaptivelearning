@@ -95,6 +95,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
 		'courses',
+		'dtforum',
 )
 
 AUTH_PROFILE_MODULE = 'courses.userprofile'
