@@ -1,13 +1,6 @@
 {% extends "alsuper.html" %}
 {% block content %}
 <script type="text/javascript">
-
-$(document).ready(function() {
-	//$("a").live("click", function() {
-		//alert('clickety');
-	//});
-});
-
 var q_status = {};
 
 function answer_question(q_id) {
@@ -20,7 +13,7 @@ function answer_question(q_id) {
 function populate_answers(q_id) {
 	var selector = "div#forum div#questions p#"+q_id;
 	$.getJSON('/dtforum/question/answers/'+q_id+'/', function(data) {
-	$(selector).append("<div style='border: 1px dashed #D3D3D3; padding:20px;' id='qa'>" + 
+		$(selector).append("<div style='border: 1px dashed #D3D3D3; padding:20px;' id='qa'>" + 
 										  questions[q_id] + 
 											"<p style='font-weight:bold;'> " + data.length + " Answers </p>" +	
 										  "</div>");
@@ -31,7 +24,8 @@ function populate_answers(q_id) {
 																	 "<tr><td><textarea rows='10' cols='80' id='answer' name='answer'></textarea></td></tr>" + 
 													 				 "<tr><td><input type='button' value='Answer' onClick='answer_question(" + q_id + ")'/></td></tr>" + 
 																	 "</table>");
-		});
+		$("textarea#answer").markItUp(mySettings);
+	});
 }
 
 function question_clicked(q_id) {
