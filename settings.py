@@ -64,10 +64,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 		'django.middleware.transaction.TransactionMiddleware',
-		'djangologging.middleware.LoggingMiddleware',
+		#'djangologging.middleware.LoggingMiddleware',
 )
 
-INTERNAL_IPS = ('127.0.0.1', '192.168.5.2')
+#INTERNAL_IPS = ('127.0.0.1', '192.168.5.2')
 
 TEMPLATE_CONTEXT_PROCESSORS = (
 		'django.core.context_processors.request',
@@ -86,6 +86,7 @@ TEMPLATE_DIRS = (
 		'/home/pshah/workspaces/adaptivelearning/templates',
 		'/home/pshah/workspaces/adaptivelearning/al/templates',
 		'/home/pshah/bin/django_src/django/contrib/admin/templates',
+		'/home/pshah/workspaces/djangoapps/django-markitup/markitup/templates',
 )
 
 INSTALLED_APPS = (
@@ -96,9 +97,12 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 		'courses',
 		'dtforum',
+		'markitup',
 )
 
 AUTH_PROFILE_MODULE = 'courses.userprofile'
+
+MARKITUP_PREVIEW_FILTER = ('markdown.markdown', {'safe_mode':True})
 
 if(hosting.use):
 	DATABASE_NAME = hosting.DATABASE_NAME

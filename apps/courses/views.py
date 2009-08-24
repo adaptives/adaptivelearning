@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
 from django.shortcuts import render_to_response
+from dtforum.views import QuestionForm
 from dtforum.models import Forum
 from dtforum.models import Question
 from dtforum.models import Answer
@@ -13,7 +14,6 @@ from courses.models import Course
 from courses.models import Topic
 from courses.models import TopicOrder
 from courses.models import CourseOrder
-
 
 def course_list(request):
 	logging.info('landing page invoked')
@@ -150,10 +150,12 @@ def courses_reorder(request):
 			msg = 'Course reordering faile ', e
 	return HttpResponse(msg)
 
+
 def topic_show(request, course_short_name, topic_id):
+	question_form = QuestionForm()
 	#Show the requested topic
 	t = Topic.objects.get(id=topic_id)
-	return render_to_response('topic/show.html', {'course_short_name':course_short_name, 'topic':t}, context_instance=RequestContext(request))
+	return render_to_response('topic/show.html', {'course_short_name':course_short_name, 'topic':t, 'question_form':question_form}, context_instance=RequestContext(request))
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_reorder(request, course_short_name):

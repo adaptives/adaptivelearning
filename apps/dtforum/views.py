@@ -1,5 +1,7 @@
 import logging
 import datetime
+from django import forms
+from django.utils.html import strip_tags
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.core import serializers
@@ -11,6 +13,13 @@ from django.shortcuts import render_to_response
 from dtforum.models import Forum
 from dtforum.models import Question
 from dtforum.models import Answer
+from markitup.widgets import MarkItUpWidget
+from django.forms.widgets import TextInput
+from markdown import markdown
+
+class QuestionForm(forms.Form):
+	title = forms.CharField(max_length=128, widget=TextInput(attrs={'class':'markItUpEditor'}))
+	contents = forms.CharField(widget=MarkItUpWidget(attrs={'cols':'80'}))
 
 class DateModifyingEncoder(DjangoJSONEncoder):
 	SECONDS_IN_DAY = 60 * 60 * 24
@@ -58,10 +67,12 @@ def get_forum_questions(request):
 		try:
 			forum = Forum.objects.select_related().get(url=forum_url)
 			questions = forum.questions.all()
+			for question in questions:
+				question.text = markdown(question.text)	
 			res = get_date_formatted_json(questions)
 			return HttpResponse(res, mimetype="application/javascript")
 		except Exception, e:
-			print "Could not get questions ", e
+			print "Error: could not process request for questions " + str(e)
 			logging.error("Error: Could not process request: " + e)
 			res = "[{'error':'Could not process request'}]"
 	else:
@@ -74,8 +85,8 @@ def submit_question(request):
 	if request.method == 'POST':
 		try:
 			url = request.POST['url']
-			title = request.POST['title']
-			text = request.POST['question']
+			title = strip_tags(request.POST['title'])
+			text = strip_tags(request.POST['question'])
 			forum = Forum.objects.get(url=url)
 			questionModel = Question()
 			questionModel.forum = forum
@@ -99,6 +110,8 @@ def get_answers_for_question(request, question_id):
 	try:
 		question = Question.objects.get(pk=int(question_id))
 		answers = question.answers.all()
+		for answer in answers:
+			answer.text = markdown(answer.text)
 		res = get_date_formatted_json(answers)
 		return HttpResponse(res, mimetype="application/javascript")
 	except Exception, e:
@@ -109,7 +122,7 @@ def get_answers_for_question(request, question_id):
 @user_passes_test(lambda u: u.is_authenticated(), "/accounts/login/")
 def submit_answer(request, question_id):
 	try:
-		answer_text = request.POST['answer']
+		answer_text = strip_tags(request.POST['answer'])
 		if not answer_text:
 			return HttpResponse('Cannot save empty answer')
 		question = Question.objects.get(pk=int(question_id))
