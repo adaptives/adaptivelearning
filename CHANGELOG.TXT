@@ -24,3 +24,15 @@
    8. Displaying newlines in all rendered questionsa and answers
 	 9. Added user voice for feedback
 
+3. Changelog as on 2009 August 25 [20090825-pre-beta]
+	 1. Refactored to use datetime.datetime.utcnow for comparing dates
+	 2. Added some fields to user_profile_public
+	 3. Superuser will not be shown in list of displayed users
+	 4. Changed namespace of courses app from adaptivelearningonline.app.courses to courses
+	 5. Moved all forum functionality to a separate dtforum app
+	 6. changed course desciption type (in the database) to TextField
+	 7. Increased the size of textarea for adding and editing courses and topics
+	 8. Fixed a bug with course_short_name which ws seen while adding topics to courses
+	 9. Added privacy policy and contact in footer
+	10. Added support for rich text editing using Jay Salvat's MarkItUp, wrapped into django-markitup (https://code.launchpad.net/django-markitup)
+	11. Removed short_name from landing (course listing) page
