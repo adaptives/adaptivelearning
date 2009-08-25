@@ -18,7 +18,7 @@ from django.forms.widgets import TextInput
 from markdown import markdown
 
 class QuestionForm(forms.Form):
-	title = forms.CharField(max_length=128, widget=TextInput(attrs={'class':'markItUpEditor'}))
+	title = forms.CharField(max_length=128, widget=TextInput(attrs={'size':"60", 'class':'markItUpEditor'}))
 	contents = forms.CharField(widget=MarkItUpWidget(attrs={'cols':'80'}))
 
 class DateModifyingEncoder(DjangoJSONEncoder):
