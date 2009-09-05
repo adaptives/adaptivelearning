@@ -55,14 +55,14 @@ function ask_question() {
 
 </script>
 <p>
-	Return to course <a href="/courses/course/show/{{course_short_name}}">{{course_short_name}}</a>
+	<b>COURSE: </b> <a href="/courses/course/show/{{course_short_name}}">{{course_short_name}}</a>
 </p>
 <p>
-<b>{{topic.title}}</b>
+<span class="topic-name">{{topic.title}}</span>
 </p>
-<p>
+<div id="topic-content">
 {{topic.content|safe}}
-</p>
+</div>
 
 <script type="text/javascript" src="/site-media/al/aforum.js"></script>
 <div id="forum">

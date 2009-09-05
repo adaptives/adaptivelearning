@@ -1,15 +1,14 @@
-<div class="menu">
-	<a href="/">Home .</a>&nbsp;&nbsp;
-	<a href="/about/">About .</a>&nbsp;&nbsp;
+<ul>	
+	<li><a href="/">Home .</a><li>
+	<li><a href="/about/">About .</a></li>
 	{% if user.is_authenticated %}
 		{% if user.is_staff %}
-			<a href="/courses/manage/">Manage Site .</a>&nbsp;&nbsp;
+			<li><a href="/courses/manage/">Manage Site .</a></li>
 		{% endif %}
-		<a href="/profile/">profile .</a>&nbsp;&nbsp;
-		<a href="/users/">Users .</a>&nbsp;&nbsp;
-		<a href="/accounts/logout?next_page=/">Logout</a>
+		<li><a href="/profile/">profile .</a></li>
+		<li><a href="/users/">Users .</a></li>
+		<li><a href="/accounts/logout?next_page=/">Logout</a></li>
 		{{ request.user.username }}
 	{% else %}
-		<a href="/accounts/login">login</a> / <a href="/registration">register</a>
+		<li><a href="/accounts/login">login</a> / <a href="/registration">register</a></li>
 	{% endif %}
-</div>
