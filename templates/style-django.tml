@@ -1,0 +1,245 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+		color: {{body.color}};
+    background: {{body.background}};
+    font: 76%/1.4; 
+		font-family: {{body.font_family|safe}};
+}
+
+#header {
+		background: {{header.background}};
+    overflow: hidden;
+		margin-bottom: 10px;
+    border-bottom: {{header.border_bottom}};
+		width: 1024px;
+}
+
+#header #header-main {
+	padding-top: 4px;
+	padding-left: 20px;
+}
+
+#nav-main {
+		background-color: {{header.nav_main__background_color}};
+		color: {{header.nav_main__color}};
+		margin-top: 10px;
+		padding-left: 16px;
+		padding-top: 2px;
+		padding-bottom: 2px;
+		overflow: none;
+		font-size: 12px;
+		font-family: {{header.nav_main__font_family|safe}};
+		font-weight: bold;
+		border-top: {{header.nav_main__border_top}};
+}
+
+#nav-main ul li {
+		display: inline;
+		margin: 5px;
+}
+
+#nav-main a:link {
+	color: {{header.nav_main__a_link_color}};
+}
+
+#nav-main a:visited {
+	color: {{header.nav_main__a_visited_color}};
+}
+
+#nav-main a:hover {
+	color: {{header.nav_main__a_hover_color}};
+}
+
+h2 {
+    font-size: {{h2.font_size}};
+    color: {{h2.color}};
+		margin-bottom: 5px;
+}
+
+#content {
+    margin: 0 20px 2em 20px;
+		float: left;
+		width: {{content.width}};
+}
+
+a:link {
+	color:{{a.link_color}};
+}
+
+a:visited {
+	color: {{a.visited_color}};
+}
+
+#content #main {
+    width: {{content.main__width}};
+    float: left;
+    padding-bottom: 4em;
+		padding-right: 10px;
+}
+
+#content #sidebar {
+		min-height: {{content.sidebar__min_height}};
+    width: {{content.sidebar__width}};
+    float: left;
+		overflow: auto;
+		background-image: {{content.sidebar__background_image|safe}};
+}
+
+#content #sidebar a:hover {
+	color: {{content.sidebar__a_hover_color}};
+}
+
+#blog-posts {
+	margin: 10px;
+	margin-top: 5px;
+	line-height: 1.4;
+}
+
+#footer {
+    clear: left;
+    background-color: {{footer.background_color}};
+    color: {{footer.color}};
+    margin-top: 2em;
+    width: {{footer.width}};
+    overflow: auto;
+}
+
+#footer a:link {
+	color: {{footer.a_link__color}};
+	font-size: {{footer.a_link__font_size}};
+	font-weight: bold;
+}
+#footer a:visited {
+	color: {{footer.a_visited__color}};
+	font-size: {{footer.a_visited__font_size}};
+	font-weight: bold;
+}
+#footer a:hover {
+	color: {{footer.a_hover__color}};
+	font-size: {{footer.a_hover__font_size}};
+	font-weight: bold;
+}
+
+#footer div.chunk {
+    margin-top: 1em;
+    margin-left: 20px;
+    width: 15%;
+    float: left;
+    margin-bottom: 2em;
+}
+
+#footer div.chunk h3 {
+    font-size: 110%;
+}
+
+#footer div.chunk ul {
+    list-style-type: none;
+}
+
+#footer #copyright {
+    clear: left;
+    padding-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 20px;
+}
+
+a {
+	text-decoration: none;
+}
+
+.course_title {
+	font-weight: bold;
+}
+
+#course-details {
+	border-bottom: {{course_details.border_bottom}};
+	margin-bottom: 10px;
+	padding-bottom: 5px;
+}
+
+#course-listing a:link {
+	color: {{course_listing.a_link__color}};
+}
+
+#course-listing a:visited {
+	color: {{course_listing.a_visited__color}};
+}
+
+#course-listing a:hover {
+	color: {{course_listing.a_hover__color}}; 
+}
+
+.course-name {
+	color: {{course_name.color}};
+	font-weight: bold;
+	padding-bottom: 15px;
+}
+
+.topic-name {
+	color: {{topic_name.color}};
+	font-weight: bold;
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+#topic-content {
+	padding: 10px;
+}
+
+.course-description {
+	line-height: 1.4;
+}
+
+.course-description a:visited {
+	color: {{course_description.a_visited__color}};	
+}
+
+.course-description a:link {
+	color: {{course_description.a_link__color}};	
+}
+
+.course-description a:hover {
+	color: {{course_description.a_hover__color}};	
+}
+
+#course-topics a:link {
+	color: {{course_topics.a_link__color}};
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+#course-topics a:visited {
+	color: {{course_topics.a_link__color}};
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+#course-topics a:hover {
+	color: {{course_topics.a_hover__color}};
+	font-weight: bold;
+	padding-left: 10px;
+}
+
+#forum {
+	margin-top: 20px;
+	line-height: 1.4;
+}
+
+.link-theme-b a:visited {
+	color: {{link_theme_b.a_link__color}};	
+}
+
+.link-theme-b a:link {
+	color: {{link_theme_b.a_link__color}};	
+}
+
+.link-theme-b a:hover {
+	color: {{link_theme_b.a_link__color}};	
+}
+
+
