@@ -55,7 +55,24 @@ function ask_question() {
 
 </script>
 <p>
-	<b>COURSE: </b> <a href="/courses/course/show/{{course_short_name}}">{{course_short_name}}</a>
+	<b>COURSE: </b> <a href="/courses/course/show/{{course.short_name}}">{{course.name}}</a>
+</p>
+<div class="topic-navigation-top">
+		<tr>
+			{% if prev %}
+				<td align="left">
+					<a href="/courses/course/topic/show/{{course_short_name}}/{{prev.id}}">&lt;&lt; previous topic..</a>  
+				</td>
+			{% endif %}
+			{% if next %}
+				<td align="right">
+					<a href="/courses/course/topic/show/{{course_short_name}}/{{next.id}}">..next topic &gt;&gt;</a> 
+				</td>
+			{% endif %}
+		</tr>
+	</table>
+</div>
+<p>
 </p>
 <p>
 <span class="topic-name">{{topic.title}}</span>
@@ -102,6 +119,22 @@ function ask_question() {
 	<tr>
 		<td><input type="button" value="Ask Question" onClick="ask_question()" /></td>
 	</tr>
+</table>
+</div>
+<div class="topic-navigation">
+<table>
+<tr>
+{% if prev %}
+<td align="left">
+	<a href="/courses/course/topic/show/{{course_short_name}}/{{prev.id}}">&lt;&lt; previous topic..</a>  
+</td>
+{% endif %}
+{% if next %}
+<td align="right">
+<a href="/courses/course/topic/show/{{course_short_name}}/{{next.id}}">..next topic &gt;&gt;</a> 
+</td>
+{% endif %}
+</tr>
 </table>
 </div>
 {% endblock %}

@@ -153,9 +153,24 @@ def courses_reorder(request):
 
 def topic_show(request, course_short_name, topic_id):
 	question_form = QuestionForm()
+	course = Course.objects.get(short_name=course_short_name)
 	#Show the requested topic
 	t = Topic.objects.get(id=topic_id)
-	return render_to_response('topic/show.html', {'course_short_name':course_short_name, 'topic':t, 'question_form':question_form}, context_instance=RequestContext(request))
+	#Get next and previous topics
+	to = TopicOrder.objects.get(topic__id=topic_id, course__short_name=course_short_name)
+	try:
+		prev_topic = TopicOrder.objects.get(course__short_name=course_short_name, order=to.order-1).topic
+	except Exception, e:
+		prev_topic = None
+		print 'Exception while getting prev topic'
+	try:
+		next_topic = TopicOrder.objects.get(course__short_name=course_short_name, order=to.order+1).topic
+	except Exception, e:
+		next_topic = None
+		print 'Exception while getting next topic'
+	print 'prev = ' + str(prev_topic)
+	print 'next = ' + str(next_topic)
+	return render_to_response('topic/show.html', {'course':course, 'topic':t, 'question_form':question_form, 'prev':prev_topic, 'next':next_topic}, context_instance=RequestContext(request))
 
 @user_passes_test(lambda u: u.is_staff, "/accounts/login/")
 def topic_reorder(request, course_short_name):

@@ -242,4 +242,24 @@ a {
 	color: {{link_theme_b.a_link__color}};	
 }
 
+.topic-navigation {
+	padding: 20px;
+	font-weight: bold;
+}
 
+.topic-navigation a {
+	color: #FF7373;
+	font-size: 14px;
+}
+
+.topic-navigation-top {
+	padding-top: 5px;
+	padding-left: 20px;
+	padding-bottom: 5px;
+	font-weight: bold;
+}
+
+.topic-navigation-top a {
+	color: #FF7373;
+	font-size: 14px;
+}
