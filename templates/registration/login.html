@@ -1,24 +1,28 @@
 {% extends "alsuper.html" %}
 
 {% block content %}
-
+  <p>
+  <strong>If you do not have an account, please register <a href="/registration">here</a>.</strong>
+  </p>
   {% if form.errors %}
     <p class="error">Sorry, that's not a valid username or password</p>
   {% endif %}
 
   <form action="" method="post">
-		<p>
-    <label for="username">User name:</label>
-    <input type="text" name="username" value="" id="username">
-    </p>
-		<p>
-		<label for="password">Password:</label>
-    <input type="password" name="password" value="" id="password">
-		</p>
-		<p>
-    <input type="submit" value="login" />
-    <input type="hidden" name="next" value="{{ next|default:"/"|escape }}" />
-		</p>
+    <table>
+        <tr>
+            <td><label for="username">User name:</label></td>
+            <td><input type="text" name="username" value="" id="username"></td>
+        </tr>
+        <tr>
+        <td><label for="password">Password:</label></td>
+        <td><input type="password" name="password" value="" id="password"></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="login" /></td>
+            <td><input type="hidden" name="next" value="{{ next|default:"/"|escape }}" /></td>
+        </tr>
+    </table>
   </form>
 
 {% endblock %}
