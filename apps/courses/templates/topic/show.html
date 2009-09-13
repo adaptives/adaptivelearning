@@ -61,12 +61,12 @@ function ask_question() {
 		<tr>
 			{% if prev %}
 				<td align="left">
-					<a href="/courses/course/topic/show/{{course_short_name}}/{{prev.id}}">&lt;&lt; previous topic..</a>  
+					<a href="/courses/course/topic/show/{{course.short_name}}/{{prev.id}}">&lt;&lt; previous topic..</a>  
 				</td>
 			{% endif %}
 			{% if next %}
 				<td align="right">
-					<a href="/courses/course/topic/show/{{course_short_name}}/{{next.id}}">..next topic &gt;&gt;</a> 
+					<a href="/courses/course/topic/show/{{course.short_name}}/{{next.id}}">..next topic &gt;&gt;</a> 
 				</td>
 			{% endif %}
 		</tr>
