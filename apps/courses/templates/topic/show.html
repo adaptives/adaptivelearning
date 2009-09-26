@@ -1,59 +1,5 @@
 {% extends "alsuper.html" %}
 {% block content %}
-<script type="text/javascript">
-var q_status = {};
-
-function answer_question(q_id) {
-	$.post('/dtforum/question/submit_answer/'+q_id+'/', {'answer':$('textarea#answer').val()}, function(data) {
-		$("div#forum div#questions p#"+q_id+" div#qa").remove();
-		populate_answers(q_id);
-	});
-}
-
-function populate_answers(q_id) {
-	var selector = "div#forum div#questions p#"+q_id;
-	$.getJSON('/dtforum/question/answers/'+q_id+'/', function(data) {
-		$(selector).append("<div style='border: 1px dashed #D3D3D3; padding:20px;' id='qa'>" + 
-										  questions[q_id] + 
-											"<p style='font-weight:bold;'> " + data.length + " Answers </p>" +	
-										  "</div>");
-		$.each(data, function(i, item) {
-			$(selector + " div#qa").append("<p style='padding:20px; border-top: 1px solid #D3D3D3;'>" + item.fields.text.replace(/\n/g, "<br>") + "<br> <i>answered about " + item.fields.time_answered + " ago by - <a href='/profile/public/" + item.fields.user + "/'>" + item.fields.user + "</a></i></p>");
-		});
-		$(selector + " div#qa").append("<table id='question_form'>" + 
-																	 "<tr><td><textarea rows='10' cols='80' id='answer' name='answer'></textarea></td></tr>" + 
-													 				 "<tr><td><input type='button' value='Answer' onClick='answer_question(" + q_id + ")'/></td></tr>" + 
-																	 "</table>");
-		$("textarea#answer").markItUp(mySettings);
-	});
-}
-
-function question_clicked(q_id) {
-	//
-	var selector = "div#forum div#questions p#"+q_id;
-	if(q_id in q_status) {
-		delete(q_status[q_id]);
-		$(selector+" div#qa").remove();	
-	}
-	else {
-		q_status[q_id] = true;
-		populate_answers(q_id);		
-	}
-}
-
-function ask_question() {
-	var title = $("div#forum table#question_form tr td input#id_title").val();
-	var question = $("div#forum table#question_form tr td textarea#id_contents").val();
-  $.post("/dtforum/topic/questions/submit/", {'url':window.location.pathname, 'title': title, 'question': question},
-          function() {
-						$("div#forum table#question_form tr td input#id_title").val('');
-						$("div#forum table#question_form tr td textarea#id_contents").val('');
-						$("div#forum table#question_form tr td iframe.markItUpPreviewFrame").remove();
-          });
-}
-
-
-</script>
 <p>
 	<b>COURSE: </b> <a href="/courses/course/show/{{course.short_name}}">{{course.name}}</a>
 </p>
@@ -80,47 +26,17 @@ function ask_question() {
 <div id="topic-content">
 {{topic.content|safe}}
 </div>
-
-<script type="text/javascript" src="/site-media/al/aforum.js"></script>
-<div id="forum">
-<h2 id="questionsHeader">Questions</h2>
-<div id="questions">
+<br/>
+<div>
+<h3>Use the comment box below to ask questions or leave comments</h3>
 </div>
-<div><strong>Ask a new question</strong></div>
-<!--
-<table id="question_form">
-	<tr>
-		<td><input type="text" id="title" name="title" value="" / ></td>
-	</tr>
-	<tr>
-		<td><textarea rows="10" cols="80" id="question" name="question"></textarea></td>
-	</tr>
-	<tr>
-		<td><input type="button" value="Ask Question" onClick="ask_question()" /></td>
-	</tr>
-</table>
--->
-<table id="question_form">
-<!--
-{{question_form.as_table}}
--->
-	<tr>
-		<td><strong>Title:</strong></td>
-	</tr>
-	<tr>
-		<td>{{question_form.title}}</td>
-	</tr>
-	<tr>
-		<td><strong>Question</strong></td>
-	</tr>
-	<tr>
-		<td>{{question_form.contents}}</td>
-	</tr>
-	<tr>
-		<td><input type="button" value="Ask Question" onClick="ask_question()" /></td>
-	</tr>
-</table>
-</div>
+<br/>
+{% if comment_embed %}
+<script type="text/javascript">
+	var disqus_developer = 1;
+</script>
+{{ comment_embed|safe }}
+{% endif %}
 <div class="topic-navigation">
 <table>
 <tr>
