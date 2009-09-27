@@ -20,14 +20,11 @@ body {
 }
 
 #header #header-main {
-	padding-top: 4px;
-	padding-left: 20px;
 }
 
 #nav-main {
 		background-color: {{header.nav_main__background_color}};
 		color: {{header.nav_main__color}};
-		margin-top: 10px;
 		padding-left: 16px;
 		padding-top: 2px;
 		padding-bottom: 2px;

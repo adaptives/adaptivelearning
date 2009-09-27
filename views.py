@@ -85,7 +85,7 @@ def style(request, file_name):
 						'main__width':'70%',
 						'sidebar__width':'27%',
 						'sidebar__min_height':'750px',
-						'sidebar__background_image':"url(\'/site-media/images/blueLinesGradient-1068x577.jpg\')",
+						'sidebar__background_image':"url(\'/site-media/images/blueLinesGradient-1068x577.jpg \')",
 						'sidebar__a_hover_color':theme['sidebar_a_hover']}
 
 	footer = {'color':theme['footer_fg'],

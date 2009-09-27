@@ -1,10 +1,10 @@
 from themes import themecolor
 
 theme = {'body_fg':themecolor['gray_666'],
-				 'body_bg':themecolor['alice_blue'],
+				 'body_bg':themecolor['white'],
 				 'a_link':themecolor['blue'],
 				 'a_visited':themecolor['blue'],
-				 'header_bg':themecolor['blue_4867d6'],
+				 'header_bg':themecolor['white'],
 				 'header_bottom_border':themecolor['blue_266fad'],
 				 'nav_main_bg':themecolor['blue_4867d6'],
 				 'nav_main_fg':themecolor['red'],
