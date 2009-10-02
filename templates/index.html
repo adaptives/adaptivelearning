@@ -1,18 +1,15 @@
 {% extends "alsuper.html" %}
 {% block content%}
-<h2 style="border-bottom: 1px solid #AAAAAA">Courses</h2>
+<h2 class="course_listing_heading">Courses</h2>
 <div id="course-listing">
 {% for course in courses %}
 	<div id="course-details">
-	<table>
-		<tr>
-			<td class="course_title"><a href="/courses/course/show/{{course.short_name}}/">{{course.name}}</a></td>
-		</tr>
-		<tr><td><!-- empty row for space between title and description --></td></tr>
-		<tr>
-			<td>{{course.description|safe|truncatewords_html:40}}</td>
-		</tr>
-	</table>
+		<div class="course_title">
+			<a href="/courses/course/show/{{course.short_name}}/">{{course.name}}</a>
+		</div>
+		<div class="course_description">
+			{{course.description|safe|truncatewords_html:40}}
+		</div>
 	</div>
 {%endfor%}
 </div>

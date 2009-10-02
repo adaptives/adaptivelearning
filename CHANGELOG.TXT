@@ -36,3 +36,9 @@
 	 9. Added privacy policy and contact in footer
 	10. Added support for rich text editing using Jay Salvat's MarkItUp, wrapped into django-markitup (https://code.launchpad.net/django-markitup)
 	11. Removed short_name from landing (course listing) page
+
+4. Changelog as on 2009 September 27 [20090825-pre-beta]
+	1. Removed dtforums and started using Disqus for comments
+
+5. Changelog as on 2009 October 4 [20091004-pre-beta]
+	2. Redesigned the website (colors, fonts, etc)

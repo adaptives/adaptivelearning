@@ -65,7 +65,7 @@ def style(request, file_name):
 
 	body = {'color':theme['body_fg'],
 					'background':theme['body_bg'],
-					'font_family':'''Georgia, "Times New Roman", serif, "Helvetica Neue", Helvetica, Arial, sans-serif'''}
+					'font_family':'''Arial,helvetica,sans-serif'''}
 
 	header = {'background':theme['header_bg'] + ' none repeat scroll 0 0',
 						'border_bottom':'1px solid ' + theme['header_bottom_border'],
@@ -83,9 +83,10 @@ def style(request, file_name):
 
 	content = {'width':'1024px',
 						'main__width':'70%',
+						'course_listing_heading__background_color':theme['course_listing_heading__background_color'],
 						'sidebar__width':'27%',
 						'sidebar__min_height':'750px',
-						'sidebar__background_image':"url(\'/site-media/images/blueLinesGradient-1068x577.jpg \')",
+						'sidebar__background_color':theme['sidebar_background_color'],
 						'sidebar__a_hover_color':theme['sidebar_a_hover']}
 
 	footer = {'color':theme['footer_fg'],
@@ -98,6 +99,7 @@ def style(request, file_name):
 						'a_hover__color':theme['footer_a_hover'],
 						'a_hover__font_size':'11px'}
 
+	#TODO: Remove
 	course_details = {'border_bottom':'1px dotted ' + theme['course_details_bottom_border']}
 
 	course_listing = {'a_link__color':theme['course_listing_a_link'],

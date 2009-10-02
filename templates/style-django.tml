@@ -7,7 +7,7 @@
 body {
 		color: {{body.color}};
     background: {{body.background}};
-    font: 76%/1.4; 
+    font-size: 13px; 
 		font-family: {{body.font_family|safe}};
 }
 
@@ -84,7 +84,7 @@ a:visited {
     width: {{content.sidebar__width}};
     float: left;
 		overflow: auto;
-		background-image: {{content.sidebar__background_image|safe}};
+		background-color: {{content.sidebar__background_color}};
 }
 
 #content #sidebar a:hover {
@@ -149,15 +149,34 @@ a {
 	text-decoration: none;
 }
 
+.course_listing_heading {
+	background: {{content.course_listing_heading__background_color}}; 
+	padding-left: 5px;
+}
+
 .course_title {
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	background: #F9F9F9;
+	border: 1px solid #EEEEEE;
 	font-weight: bold;
 }
 
 #course-details {
-	border-bottom: {{course_details.border_bottom}};
 	margin-bottom: 10px;
 	padding-bottom: 5px;
 }
+
+.course_description {
+	text-align: justify;
+	padding: 5px;
+	border-bottom: 1px solid #EEEEEE;
+	border-left: 1px solid #EEEEEE;
+	border-right: 1px solid #EEEEEE;
+}
+
 
 #course-listing a:link {
 	color: {{course_listing.a_link__color}};
@@ -179,9 +198,10 @@ a {
 
 .topic-name {
 	color: {{topic_name.color}};
+	background-color: #EEEEEE;
 	font-weight: bold;
-	padding-top: 15px;
-	padding-bottom: 15px;
+	padding-left: 5px;
+	font-size: 13px;
 }
 
 #topic-content {
@@ -190,6 +210,11 @@ a {
 
 .course-description {
 	line-height: 1.4;
+	text-align: justify;
+}
+
+.course-description td p {
+	padding-bottom: 8px;
 }
 
 .course-description a:visited {
@@ -202,6 +227,10 @@ a {
 
 .course-description a:hover {
 	color: {{course_description.a_hover__color}};	
+}
+
+#course-topics {
+	margin-left: 20px;
 }
 
 #course-topics a:link {
@@ -259,4 +288,24 @@ a {
 .topic-navigation-top a {
 	color: #FF7373;
 	font-size: 14px;
+}
+
+.link-theme-static {
+	text-align: justify
+}
+
+.link-theme-static p {
+	padding-bottom: 8px;
+}
+
+.link-theme-static p {
+	padding-bottom: 8px;
+}
+
+.link-theme-static ul {
+	margin: 20px;
+}
+
+.link-theme-static ol {
+	margin: 20px;
 }
