@@ -3,17 +3,17 @@
 <p>
 <table>
 <tr>
-<td><h2>Course: <span class="course-name">{{course.name}}</span></h2></td>
+<td><h2 class="course_listing_heading">Course: <span class="course-name">{{course.name}}</span></h2></td>
 </tr>
 <tr class="course-description">
 <td colspan="2"><p>{{course.description|safe}}</p></td>
 </tr>
 </table>
 <h3>Topics</h3>
-<table id="course-topics">
+<ul id="course-topics">
 	{%for topic in topics%}
-		<tr><td><a href="/courses/course/topic/show/{{course.short_name}}/{{topic.id}}">{{topic.title}}</a></td></tr>
+		<li><a href="/courses/course/topic/show/{{course.short_name}}/{{topic.id}}">{{topic.title}}</a></li>
 	{%endfor%}
-</table>
+</ul>
 {% endblock %}
 

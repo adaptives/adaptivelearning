@@ -1,8 +1,7 @@
 {% extends "alsuper.html" %}
 {% block content %}
-<p>
-	<b>COURSE: </b> <a href="/courses/course/show/{{course.short_name}}">{{course.name}}</a>
-</p>
+<h2 class="course_listing_heading"><strong>Course: </strong> <a href="/courses/course/show/{{course.short_name}}">{{course.name}}</a></h2>
+<h2 class="topic-name"><strong>Topic: </strong>{{topic.title}}</h2>
 <div class="topic-navigation-top">
 		<tr>
 			{% if prev %}
@@ -21,7 +20,6 @@
 <p>
 </p>
 <p>
-<span class="topic-name">{{topic.title}}</span>
 </p>
 <div id="topic-content">
 {{topic.content|safe}}
