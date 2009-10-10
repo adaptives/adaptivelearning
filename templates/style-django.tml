@@ -208,6 +208,10 @@ a {
 	padding: 10px;
 }
 
+#topic-content p {
+    margin-bottom:10px;
+}
+
 .course-description {
 	line-height: 1.4;
 	text-align: justify;
@@ -215,6 +219,10 @@ a {
 
 .course-description td p {
 	padding-bottom: 8px;
+}
+
+.course-description ul {
+    margin-left: 20px;
 }
 
 .course-description a:visited {
