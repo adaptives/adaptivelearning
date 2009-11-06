@@ -9,11 +9,23 @@
 <td colspan="2"><p>{{course.description|safe}}</p></td>
 </tr>
 </table>
+<div id="share">
+{% load sociable_tags %}
+{% get_sociable Reddit Digg del.icio.us Facebook Google Slashdot StumbleUpon Tumblr YCombinator as sociable_links with url=request.path title=course.name %}
+<span style="color: #269926; font-size: 16px;">share:</span> 
+{% for link in sociable_links %}
+    <a href="{{ link.link }}">
+			<img alt="{{ link.site }}" title="{{ link.site }}" src="{{ link.image }}" />
+    </a>
+{% endfor %}
+</div>
+<br/>
 <h3>Topics</h3>
 <ul id="course-topics">
 	{%for topic in topics%}
 		<li><a href="/courses/course/topic/show/{{course.short_name}}/{{topic.id}}">{{topic.title}}</a></li>
 	{%endfor%}
 </ul>
+
 {% endblock %}
 

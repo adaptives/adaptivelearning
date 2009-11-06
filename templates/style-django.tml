@@ -317,3 +317,11 @@ a {
 .link-theme-static ol {
 	margin: 20px;
 }
+
+#share {
+	font-weight: bold;
+}
+
+#share img {
+	border: none;
+}

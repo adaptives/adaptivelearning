@@ -42,7 +42,7 @@ MEDIA_ROOT = '/home/pshah/workspaces/adaptivelearning/site-media/'
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/site-media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -98,11 +98,14 @@ INSTALLED_APPS = (
 		'courses',
 		'dtforum',
 		'markitup',
+		'sociable',
 )
 
 AUTH_PROFILE_MODULE = 'courses.userprofile'
 
 MARKITUP_PREVIEW_FILTER = ('markdown.markdown', {'safe_mode':True})
+
+SOCIABLE_IMAGE_PATH = 'sociable-images'
 
 if(hosting.use):
 	DATABASE_NAME = hosting.DATABASE_NAME
